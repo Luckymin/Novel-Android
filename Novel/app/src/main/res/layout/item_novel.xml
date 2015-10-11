@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="book"
+            type="com.startsmake.novel.bean.NovelListBean.BooksEntity"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/novel_list_item_height"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:transitionName="@string/transition_novel_list_item">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@id/ivNovelCover"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:transitionName="@string/transition_novel_cover"/>
+
+            <TextView
+                android:id="@id/tvNovelName"
+                style="@style/TextView"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
+                android:layout_marginTop="4dp"
+                android:layout_toLeftOf="@id/tvNovelAuthor"
+                android:layout_toRightOf="@id/ivNovelCover"
+                android:singleLine="true"
+                android:text="@{book.title}"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@id/tvNovelAuthor"
+                style="@style/TextView"
+                android:layout_alignBottom="@id/tvNovelName"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:singleLine="true"
+                android:text="@{book.author}"
+                android:textColor="@color/textSecondary"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@id/tvNovelShortIntro"
+                style="@style/TextView"
+                android:layout_below="@id/tvNovelName"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/ivNovelCover"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{book.shortIntro}"
+                />
+
+            <TextView
+                style="@style/TextView"
+                android:layout_below="@id/tvNovelShortIntro"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/ivNovelCover"
+                android:singleLine="true"
+                android:text="@{book.lastChapter}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

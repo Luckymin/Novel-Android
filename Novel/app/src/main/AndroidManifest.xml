@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.minxiaoming.novel"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--网络访问权限-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name="com.startsmake.novel.NovelApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_novel"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.startsmake.novel.ui.activity.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.StatusBarTransparent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.startsmake.novel.ui.activity.ClassifyAndRankingNovelListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+
+        <activity
+            android:name="com.startsmake.novel.ui.activity.NovelIntroActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name="com.startsmake.novel.ui.activity.ReaderNovelActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+
+    </application>
+
+</manifest>

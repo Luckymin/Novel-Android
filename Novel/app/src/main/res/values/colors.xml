@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<color name="divider">#e6e6e6</color>-->
+<resources>
+    <!--主色-->
+    <color name="colorPrimary">#ff039be5</color>
+    <!--主色 暗-->
+    <color name="colorPrimaryDark">#ff0277bd</color>
+    <!--主色 亮-->
+    <color name="colorPrimaryLight">#B3E5FC</color>
+    <!--辅色-->
+    <color name="colorAccent">#ff0277bd</color>
+    <!--普通文字-->
+    <color name="textPrimary">#212121</color>
+    <!--减淡文字-->
+    <color name="textSecondary">#727272</color>
+    <!--禁用文字/提示文字颜色-->
+    <color name="dis_hint_text">#42000000</color>
+    <!--分割线-->
+    <color name="divider">#B6B6B6</color>
+
+
+    <color name="battery_view_color">#93764c</color>
+
+
+</resources>
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="drawerLayout" type="id"/>
+    <item name="rootLayout" type="id"/>
+    <item name="toolbar" type="id"/>
+    <item name="fabBtn" type="id"/>
+    <item name="contentFrame" type="id"/>
+    <item name="tabLayout" type="id"/>
+    <item name="navigation" type="id"/>
+    <item name="navigation_item_bookcase" type="id"/>
+    <item name="navigation_item_classification" type="id"/>
+    <item name="navigation_item_ranking" type="id"/>
+    <item name="vpClassification" type="id"/>
+    <item name="pbLoading" type="id"/>
+    <item name="llLoadingFailure" type="id"/>
+    <item name="btnRetry" type="id"/>
+    <item name="rvClassificationList" type="id"/>
+    <item name="vpNovelClassifyFiltrate" type="id"/>
+    <item name="rvNovelList" type="id"/>
+    <item name="ivNovelCover" type="id"/>
+    <item name="tvNovelName" type="id"/>
+    <item name="tvNovelShortIntro" type="id"/>
+    <item name="tvNovelAuthor" type="id"/>
+    <item name="tvNovelLastChapter" type="id"/>
+    <item name="tvNovelClassifyAndWordCount" type="id"/>
+    <item name="llReadOrAddBookRack" type="id"/>
+    <item name="btnStartReading" type="id"/>
+    <item name="slidingNovelContainer" type="id"/>
+    <item name="tvChapterBody" type="id"/>
+    <item name="tvChapterTitle" type="id"/>
+    <item name="tvPagePosition" type="id"/>
+    <item name="tvCurrentTime" type="id"/>
+    <item name="batterView" type="id"/>
+</resources>

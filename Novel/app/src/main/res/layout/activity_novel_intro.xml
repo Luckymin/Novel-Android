@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data class="com.minxiaoming.novel.ActivityNovelIntroBinding">
+
+        <import type="com.startsmake.novel.utils.DataBindingXmlUtils"/>
+
+        <variable
+            name="novelInfo"
+            type="com.startsmake.novel.bean.NovelInfoBean"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <com.startsmake.novel.ui.widget.NestedScrollView
+            android:id="@id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_small"
+                android:transitionName="@string/transition_novel_list_item"
+                app:cardBackgroundColor="@android:color/white">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@id/ivNovelCover"
+                        android:layout_width="@dimen/novel_intro_cover_width"
+                        android:layout_height="@dimen/novel_intro_cover_height"
+                        android:layout_marginLeft="@dimen/margin_medium"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:transitionName="@string/transition_novel_cover"/>
+
+                    <TextView
+                        android:id="@id/tvNovelName"
+                        style="@style/TextView"
+                        android:layout_alignTop="@id/ivNovelCover"
+                        android:layout_toRightOf="@id/ivNovelCover"
+                        android:singleLine="true"
+                        android:text="@{novelInfo.title}"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@id/tvNovelClassifyAndWordCount"
+                        style="@style/TextView"
+                        android:layout_below="@id/tvNovelName"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_toRightOf="@id/ivNovelCover"
+                        android:text="@{novelInfo == null ?  novelInfo.cat : DataBindingXmlUtils.novelClassifyAndWordCountFormat(novelInfo.cat,novelInfo.wordCount,novelInfo.followerCount)}"
+                        />
+
+                    <TextView
+                        android:id="@id/tvNovelAuthor"
+                        style="@style/TextView"
+                        android:layout_below="@id/tvNovelClassifyAndWordCount"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_toRightOf="@id/ivNovelCover"
+                        android:text="@{novelInfo.author}"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_alignBottom="@id/tvNovelAuthor"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_toRightOf="@id/tvNovelAuthor"
+                        android:text="@{novelInfo == null ? novelInfo.updated : DataBindingXmlUtils.dateFormat(novelInfo.updated) + @string/date_updated_suffix}"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvNovelAuthor"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_toRightOf="@id/ivNovelCover"
+                        android:text="@{novelInfo.lastChapter}"
+                        android:textColor="@color/colorPrimary"/>
+
+
+                    <LinearLayout
+                        android:id="@id/llReadOrAddBookRack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ivNovelCover"
+                        android:layout_marginLeft="@dimen/margin_medium"
+                        android:layout_marginRight="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/novel_intro_btn_height"
+                            android:layout_marginRight="@dimen/margin_small"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_novel_add_book_rack"
+                            android:text="@string/novel_add_book_rack"
+                            android:textColor="@color/colorPrimary"/>
+
+                        <Button
+                            android:id="@id/btnStartReading"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/novel_intro_btn_height"
+                            android:layout_marginLeft="@dimen/margin_small"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_novel_start_reading_book"
+                            android:text="@string/novel_start_reading_book"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/TextView"
+                        android:layout_below="@id/llReadOrAddBookRack"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginLeft="@dimen/margin_medium"
+                        android:layout_marginRight="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@{novelInfo.longIntro}"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+        </com.startsmake.novel.ui.widget.NestedScrollView>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>
