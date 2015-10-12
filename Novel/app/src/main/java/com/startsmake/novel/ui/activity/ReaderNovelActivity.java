@@ -110,13 +110,22 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
 
         } else if (direction == DIRECTION_PREVIOUS && isLoadingPrevious) {
             isLoadingPrevious = false;
+            if (novelChapters.getCurrPagePosition() < 0) {
+                novelChapters.setCurrPagePosition(chapterContent.getPages().size() - 1);
+                mAdapter.getUpdatedCurrentView();
+                View previousView = mAdapter.getUpdatedPreviousView();
+                if (previousView != null) {
+                    if (previousView.getParent() == null) {
+                        mSlidingLayout.addView(previousView);
+                    }
+                    previousView.scrollTo(Utils.getScreenWidth(), 0);
+                }
+            }else{
+                mAdapter.getUpdatedPreviousView();
+            }
 
-            mAdapter.getUpdatedCurrentView();
-            mAdapter.getUpdatedPreviousView();
+
         }
-
-//        if (novelChapters.getCurrChapterPosition() != startReadPosition) return;
-
 
     }
 
