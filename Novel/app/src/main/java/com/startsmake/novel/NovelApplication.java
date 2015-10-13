@@ -1,6 +1,6 @@
 package com.startsmake.novel;
 
-import com.minxiaoming.novel.BuildConfig;
+
 import com.startsmake.novel.http.RequestManager;
 import com.startsmake.novel.timber.CrashReportingTree;
 

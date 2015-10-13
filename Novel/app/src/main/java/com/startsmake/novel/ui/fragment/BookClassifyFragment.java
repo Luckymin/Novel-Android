@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.startsmake.novel.Interfaces.OnClassificationCallback;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.BookClassificationBean;
 import com.startsmake.novel.model.BookClassificationModel;
 import com.startsmake.novel.ui.adapter.TabLayoutViewPagerAdapter;

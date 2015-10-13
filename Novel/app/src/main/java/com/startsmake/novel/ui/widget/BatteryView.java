@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.utils.Utils;
 
 /**

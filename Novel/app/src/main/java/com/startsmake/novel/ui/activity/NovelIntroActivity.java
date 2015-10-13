@@ -14,13 +14,11 @@ import android.view.ViewTreeObserver;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.minxiaoming.novel.ActivityNovelIntroBinding;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.ActivityNovelIntroBinding;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelInfoBean;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.model.NovelIntroModel;
-
-import timber.log.Timber;
 
 /**
  * User:Shine

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -15,7 +16,7 @@ import android.view.WindowManager;
 
 import com.martian.libsliding.SlidingLayout;
 import com.martian.libsliding.slider.OverlappedSlider;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.ChapterContent;
 import com.startsmake.novel.bean.db.NovelChapters;
 import com.startsmake.novel.model.ReadingNovelModel;
@@ -120,7 +121,7 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
                     }
                     previousView.scrollTo(Utils.getScreenWidth(), 0);
                 }
-            }else{
+            } else {
                 mAdapter.getUpdatedPreviousView();
             }
 
@@ -165,6 +166,44 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
 
         mSlidingLayout = (SlidingLayout) findViewById(R.id.slidingNovelContainer);
         mSlidingLayout.setSlider(new OverlappedSlider()); // 左右覆盖滑动
+
+        mSlidingLayout.setOnSlideChangeListener(new SlidingLayout.OnSlideChangeListener() {
+            @Override
+            public void onSlideScrollStateChanged(int touchResult) {
+
+            }
+
+            @Override
+            public void onSlideSelected(Object obj) {
+                if (obj == null || !(obj instanceof Integer[])) return;
+                //预加载下一章节
+                int chapterPosition = ((Integer[]) obj)[0];
+                if (chapterPosition < mAdapter.getNovelChapters().getChapters().size() - 1) {//判断是否还有下一章节
+                    //判断下一章节是否为null
+                    ChapterContent chapterContent = mAdapter.getNovelChapters().getChapters().get(chapterPosition + 1).getChapterContent();
+
+                    if (chapterContent == null) {
+                        //加载下一章节
+                        onLoadingNextChapter(mAdapter.getNovelChapters());
+                    }
+
+                }
+
+            }
+        });
+
+        mSlidingLayout.setOnTapListener(new SlidingLayout.OnTapListener() {
+            @Override
+            public void onSingleTap(MotionEvent event) {
+                int x = (int) event.getX();
+                if (x > Utils.getScreenWidth() / 2){
+                    mSlidingLayout.slideNext();
+                }else if (x <= Utils.getScreenWidth() / 2){
+                    mSlidingLayout.slidePrevious();
+                }
+
+            }
+        });
 
 
         mAdapter = new NovelSlidingAdapter(this, this);

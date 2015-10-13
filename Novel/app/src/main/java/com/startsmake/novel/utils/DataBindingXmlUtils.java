@@ -1,6 +1,7 @@
 package com.startsmake.novel.utils;
 
-import com.minxiaoming.novel.R;
+
+import com.startsmake.novel.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

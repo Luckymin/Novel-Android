@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data class="com.minxiaoming.novel.ActivityNovelIntroBinding">
+    <data class="com.startsmake.novel.ActivityNovelIntroBinding">
 
         <import type="com.startsmake.novel.utils.DataBindingXmlUtils"/>
 

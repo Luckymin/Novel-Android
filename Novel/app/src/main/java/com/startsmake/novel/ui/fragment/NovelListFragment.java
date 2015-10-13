@@ -12,7 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelListBean;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.model.NovelListModel;

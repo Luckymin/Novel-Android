@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.BookClassificationBean;
 import com.startsmake.novel.ui.activity.ClassifyAndRankingNovelListActivity;
 import com.startsmake.novel.ui.adapter.ClassificationListAdapter;

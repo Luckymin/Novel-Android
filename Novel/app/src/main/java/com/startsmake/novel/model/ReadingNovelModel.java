@@ -104,8 +104,6 @@ public class ReadingNovelModel extends BaseModel {
 
     @Override
     public void getNovelChaptersBySourceID(final String novelID, String sourceID, final ReadingNovelCallback callback) {
-
-
         //获取小说章节信息
         List<NovelChapters> locaChapterList = DataSupport.where("sourceID = ? ", sourceID).find(NovelChapters.class);
         final long timeMillis = System.currentTimeMillis();

@@ -8,6 +8,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -17,7 +18,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.ui.adapter.TabLayoutViewPagerAdapter;
 import com.startsmake.novel.ui.fragment.NovelListFragment;
 import com.startsmake.novel.utils.Constants;
@@ -41,6 +42,7 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
     private int[] mStartingLocation = new int[2];
 
     private TabLayout mTabLayout;
+    private AppBarLayout mAppBarLayout;
     private ViewPager mVpNovelClassifyFiltrate;
     private ViewGroup mRootLayout;
 
@@ -68,6 +70,7 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
 
     private void initView() {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mVpNovelClassifyFiltrate = (ViewPager) findViewById(R.id.vpNovelClassifyFiltrate);
         mRootLayout = (ViewGroup) findViewById(R.id.rootLayout);
         TabLayoutViewPagerAdapter adapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager());
@@ -111,7 +114,7 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
      * activity 退出动画
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void animateRevealHide(final View view) {
+    private void animateRevealHide(final View appBarLayout, final View view) {
         /*int initialRadius = viewRoot.getWidth();
         Animator anim = ViewAnimationUtils.createCircularReveal(viewRoot, mStartingLocation[0], mStartingLocation[1], initialRadius, 0);
         anim.addListener(new AnimatorListenerAdapter() {
@@ -125,6 +128,11 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
         });
         anim.setDuration(Constants.HIDE_ANIMATE_REVEAL_DURATION);
         anim.start();*/
+
+        appBarLayout.animate().alpha(0)
+                .setDuration(ENTER_DURATION)
+                .start();
+
         view.animate().translationY(Utils.getScreenHeight())
                 .setDuration(ENTER_DURATION)
                 .setListener(new AnimatorListenerAdapter() {
@@ -150,7 +158,7 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
     public void onBackPressed() {
         if (!isExit) {
             isExit = true;
-            animateRevealHide(mVpNovelClassifyFiltrate);
+            animateRevealHide(mAppBarLayout, mVpNovelClassifyFiltrate);
         }
     }
 

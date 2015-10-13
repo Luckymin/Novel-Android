@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.startsmake.novel.Interfaces.OnClassificationCallback;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.ui.fragment.BookClassifyFragment;
 import com.startsmake.novel.ui.fragment.BookRackFragment;
 import com.startsmake.novel.ui.fragment.BookRankingFragment;

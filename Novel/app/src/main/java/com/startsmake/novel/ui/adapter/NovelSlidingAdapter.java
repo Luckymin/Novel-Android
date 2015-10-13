@@ -7,7 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.martian.libsliding.SlidingAdapter;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.ChapterContent;
 import com.startsmake.novel.bean.db.NovelChapters;
 import com.startsmake.novel.ui.widget.BatteryView;
@@ -180,7 +180,7 @@ public class NovelSlidingAdapter extends SlidingAdapter<Integer[]> {
             return false;
         }
 
-        if (currPagePosition == 0) {
+        if (currPagePosition < 0) {
             List<NovelChapters.ChaptersInformation> informationList = mNovelChapters.getChapters();
             if (informationList.get(currChapterPosition).getChapterContent() == null &&informationList.get(currChapterPosition - 1).getChapterContent() == null) {
                 return false;

@@ -20,19 +20,27 @@ public class OverlappedSlider extends BaseSlider {
 
     private int mVelocityValue = 0;
 
-    /** 商定这个滑动是否有效的距离 */
+    /**
+     * 商定这个滑动是否有效的距离
+     */
     private int limitDistance = 0;
 
     private int screenWidth = 0;
 
-    /** 最后触摸的结果方向 */
+    /**
+     * 最后触摸的结果方向
+     */
     private int mTouchResult = MOVE_NO_RESULT;
-    /** 一开始的方向 */
+    /**
+     * 一开始的方向
+     */
     private int mDirection = MOVE_NO_RESULT;
 
     private int mMode = MODE_NONE;
 
-    /** 滑动的view */
+    /**
+     * 滑动的view
+     */
     private View mScrollerView = null;
 
     private int startX = 0;
@@ -67,7 +75,7 @@ public class OverlappedSlider extends BaseSlider {
             prevView.scrollTo(screenWidth, 0);
         }
 
-//        mSlidingLayout.slideSelected(getAdapter().getCurrent());
+        mSlidingLayout.slideSelected();
     }
 
     public View getTopView() {
@@ -151,8 +159,8 @@ public class OverlappedSlider extends BaseSlider {
                 final int scrollX = mScrollerView.getScrollX();
                 mVelocityValue = (int) mVelocityTracker.getXVelocity();
                 // scroll左正，右负(),(startX + dx)的值如果为0，即复位
-			/*
-			 * android.widget.Scroller.startScroll( int startX, int startY, int
+            /*
+             * android.widget.Scroller.startScroll( int startX, int startY, int
 			 * dx, int dy, int duration )
 			 */
 
@@ -189,6 +197,7 @@ public class OverlappedSlider extends BaseSlider {
         }
         return true;
     }
+
     private void resetVariables() {
         mDirection = MOVE_NO_RESULT;
         mMode = MODE_NONE;
@@ -208,20 +217,20 @@ public class OverlappedSlider extends BaseSlider {
 
         getAdapter().moveToNext();
 
-        if (getAdapter().hasNext()) {
-            // Update content in the old view
-            if (newNextView != null) {
-                View updateNextView = getAdapter().getView(newNextView, getAdapter().getNext());
-                if (updateNextView != newNextView) {
-                    getAdapter().setNextView(updateNextView);
-                    newNextView = updateNextView;
-                }
-            } else {
-                newNextView = getAdapter().getNextView();
+        mSlidingLayout.slideSelected();
+
+        // Update content in the old view
+        if (newNextView != null) {
+            View updateNextView = getAdapter().getView(newNextView, getAdapter().getNext());
+            if (updateNextView != newNextView) {
+                getAdapter().setNextView(updateNextView);
+                newNextView = updateNextView;
             }
-            mSlidingLayout.addView(newNextView, 0);
-            newNextView.scrollTo(0, 0);
+        } else {
+            newNextView = getAdapter().getNextView();
         }
+        mSlidingLayout.addView(newNextView, 0);
+        newNextView.scrollTo(0, 0);
 
         return true;
     }
@@ -238,23 +247,21 @@ public class OverlappedSlider extends BaseSlider {
 
         getAdapter().moveToPrevious();
 
-//        mSlidingLayout.slideSelected(getAdapter().getCurrent());
+        mSlidingLayout.slideSelected();
 
-        if (getAdapter().hasPrevious()) {
-            // Reuse the previous view as the next view
-            // Update content in the old view
-            if (newPrevView != null) {
-                View updatedPrevView = getAdapter().getView(newPrevView, getAdapter().getPrevious());
-                if (newPrevView != updatedPrevView) {
-                    getAdapter().setPreviousView(updatedPrevView);
-                    newPrevView = updatedPrevView;
-                }
-            } else {
-                newPrevView = getAdapter().getPreviousView();
+        // Reuse the previous view as the next view
+        // Update content in the old view
+        if (newPrevView != null) {
+            View updatedPrevView = getAdapter().getView(newPrevView, getAdapter().getPrevious());
+            if (newPrevView != updatedPrevView) {
+                getAdapter().setPreviousView(updatedPrevView);
+                newPrevView = updatedPrevView;
             }
-            mSlidingLayout.addView(newPrevView);
-            newPrevView.scrollTo(screenWidth, 0);
+        } else {
+            newPrevView = getAdapter().getPreviousView();
         }
+        mSlidingLayout.addView(newPrevView);
+        newPrevView.scrollTo(screenWidth, 0);
 
         return true;
     }
@@ -295,28 +302,41 @@ public class OverlappedSlider extends BaseSlider {
 
     @Override
     public void slideNext() {
-        if (!getAdapter().hasNext() || !mScroller.isFinished())
+        if (!getAdapter().hasNext())
             return;
+
+        if (!mScroller.isFinished()) {
+            mScrollerView.scrollTo(screenWidth, 0);
+        }
 
         mScrollerView = getCurrentShowView();
 
+        moveToNext();
+
         mScroller.startScroll(0, 0, screenWidth, 0, 500);
-        mTouchResult = MOVE_TO_LEFT;
+        mTouchResult = MOVE_NO_RESULT;
 
         mSlidingLayout.slideScrollStateChanged(MOVE_TO_LEFT);
 
         invalidate();
+
     }
 
     @Override
     public void slidePrevious() {
-        if (!getAdapter().hasPrevious() || !mScroller.isFinished())
+        if (!getAdapter().hasPrevious())
             return;
 
+        if (!mScroller.isFinished()) {
+//            mScroller.forceFinished(true);
+            mScrollerView.scrollTo(0, 0);
+        }
         mScrollerView = getTopView();
 
+        moveToPrevious();
+
         mScroller.startScroll(screenWidth, 0, -screenWidth, 0, 500);
-        mTouchResult = MOVE_TO_RIGHT;
+        mTouchResult = MOVE_NO_RESULT;
 
         mSlidingLayout.slideScrollStateChanged(MOVE_TO_RIGHT);
 

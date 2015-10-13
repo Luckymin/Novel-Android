@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.minxiaoming.novel.ClassificationItemDataBinding;
 import com.startsmake.novel.Interfaces.OnClickListener;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.BookClassificationBean;
 
 import java.util.List;

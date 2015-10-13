@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.Interfaces.OnClickListener;
-import com.minxiaoming.novel.R;
+import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelListBean;
-import com.minxiaoming.novel.databinding.ItemNovelBinding;
+import com.startsmake.novel.databinding.ItemNovelBinding;
 import com.startsmake.novel.http.HttpConstant;
 
 import java.util.ArrayList;

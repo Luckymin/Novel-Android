@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.minxiaoming.novel"
+    package="com.startsmake.novel"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--网络访问权限-->
