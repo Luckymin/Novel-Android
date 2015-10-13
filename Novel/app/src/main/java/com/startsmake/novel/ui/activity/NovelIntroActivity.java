@@ -75,6 +75,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
 
     private void initView() {
         mDataBinding.btnStartReading.setOnClickListener(this);
+        mDataBinding.btnAddBookshelf.setOnClickListener(this);
         mDataBinding.scrollView.setOnScrollListener(this);
         Glide.with(this)
                 .load(HttpConstant.URL_PICTURE + mNovelCoverUrl)
@@ -131,6 +132,14 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
             case R.id.btnStartReading:
                 ReaderNovelActivity.openActivity(this, mNovelID);
                 break;
+            case R.id.btnAddBookshelf:
+                NovelInfoBean novelInfoBean = mDataBinding.getNovelInfo();
+                if (novelInfoBean == null) {
+                    return;
+                }
+                mDataBinding.btnAddBookshelf.setText("移出书架");
+
+                break;
         }
     }
 
@@ -147,8 +156,6 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
         outState.putString(EXTRA_NOVEL_ID, mNovelID);
         outState.putString(EXTRA_NOVEL_NAME, mNovelName);
         outState.putString(EXTRA_NOVEL_COVER_URL, mNovelCoverUrl);
-
-
     }
 
 

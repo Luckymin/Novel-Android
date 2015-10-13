@@ -229,7 +229,8 @@ public class OverlappedSlider extends BaseSlider {
         } else {
             newNextView = getAdapter().getNextView();
         }
-        mSlidingLayout.addView(newNextView, 0);
+        if (newNextView.getParent() == null)
+            mSlidingLayout.addView(newNextView, 0);
         newNextView.scrollTo(0, 0);
 
         return true;
@@ -260,7 +261,8 @@ public class OverlappedSlider extends BaseSlider {
         } else {
             newPrevView = getAdapter().getPreviousView();
         }
-        mSlidingLayout.addView(newPrevView);
+        if (newPrevView.getParent() == null)
+            mSlidingLayout.addView(newPrevView);
         newPrevView.scrollTo(screenWidth, 0);
 
         return true;
@@ -328,7 +330,6 @@ public class OverlappedSlider extends BaseSlider {
             return;
 
         if (!mScroller.isFinished()) {
-//            mScroller.forceFinished(true);
             mScrollerView.scrollTo(0, 0);
         }
         mScrollerView = getTopView();

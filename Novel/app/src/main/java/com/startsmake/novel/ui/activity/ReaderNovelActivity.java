@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,7 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
 
     private ReaderTextView mTextView;
 
-    private Handler mHandler;
+//    private Handler mHandler;
 
     private boolean isLoadingNext;
     private boolean isLoadingPrevious;
@@ -150,7 +149,7 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
         } else {
             mNovelID = savedInstanceState.getString(EXTRA_NOVEL_ID);
         }
-        mHandler = new Handler();
+//        mHandler = new Handler();
         mModel = new ReadingNovelModel();
         //注册广播监听器
         mTimeTickReceiver = new TimeTickReceiver();
@@ -196,9 +195,9 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
             @Override
             public void onSingleTap(MotionEvent event) {
                 int x = (int) event.getX();
-                if (x > Utils.getScreenWidth() / 2){
+                if (x > Utils.getScreenWidth() / 2) {
                     mSlidingLayout.slideNext();
-                }else if (x <= Utils.getScreenWidth() / 2){
+                } else if (x <= Utils.getScreenWidth() / 2) {
                     mSlidingLayout.slidePrevious();
                 }
 
@@ -225,12 +224,12 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
         if (isLoadingNext) return;
         isLoadingNext = true;
         final int index = novelChapters.getCurrChapterPosition() + 1;
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mModel.readingChapterBodyByChapterLink(index, DIRECTION_NEXT, novelChapters, mReadingNovelCallback);
-            }
-        }, 2000);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+        mModel.readingChapterBodyByChapterLink(index, DIRECTION_NEXT, novelChapters, mReadingNovelCallback);
+//            }
+//        }, 2000);
     }
 
     /*加载上一页的章节内容*/
@@ -239,12 +238,12 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
         if (isLoadingPrevious) return;
         isLoadingPrevious = true;
         final int index = novelChapters.getCurrChapterPosition() - 1;
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mModel.readingChapterBodyByChapterLink(index, DIRECTION_PREVIOUS, novelChapters, mReadingNovelCallback);
-            }
-        }, 2000);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+        mModel.readingChapterBodyByChapterLink(index, DIRECTION_PREVIOUS, novelChapters, mReadingNovelCallback);
+//            }
+//        }, 2000);
     }
 
 
@@ -273,9 +272,9 @@ public class ReaderNovelActivity extends BaseActivity implements NovelSlidingAda
         if (mTimeTickReceiver != null) {
             unregisterReceiver(mTimeTickReceiver);
         }
-        if (mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-        }
+//        if (mHandler != null) {
+//            mHandler.removeCallbacksAndMessages(null);
+//        }
     }
 
     class TimeTickReceiver extends BroadcastReceiver {

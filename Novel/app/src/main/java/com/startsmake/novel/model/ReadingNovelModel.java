@@ -41,7 +41,7 @@ public class ReadingNovelModel extends BaseModel {
             @Override
             public void onGetChaptersSuccess(NovelChapters novelChapters) {
                 //第三步 - 根据章节名获取小说内容
-                readingChapterBodyByChapterLink(novelChapters.getCurrChapterPosition(),0, novelChapters, callback);
+                readingChapterBodyByChapterLink(novelChapters.getCurrChapterPosition(), 0, novelChapters, callback);
             }
 
             @Override
@@ -60,11 +60,11 @@ public class ReadingNovelModel extends BaseModel {
 
     @Override
     public void getNovelSourceByID(final String novelID, final ReadingNovelCallback callback) {
-        List<NovelSource> locaSourceList = DataSupport.where("novelID = ? ", novelID).find(NovelSource.class);
+        final List<NovelSource> locaSourceList = DataSupport.where("novelID = ? ", novelID).find(NovelSource.class);
         //数据库中已经存在来源json字符 并且 上次刷新时间小于一周
         final long timeMillis = System.currentTimeMillis();
         if (locaSourceList != null && locaSourceList.size() > 0 && timeMillis - locaSourceList.get(0).getRefreshDate() < Constants.MILLIS_WEEK) {
-            Timber.d("getNovelSourceByID --> 数据库中获取小说来源");
+            Timber.d("数据库查询 --> 小说来源");
             callback.onGetSourceSuccess(locaSourceList);
         } else {
             //拼接url地址获取小说来源列表
@@ -73,7 +73,7 @@ public class ReadingNovelModel extends BaseModel {
             params.put("view", "summary");
             params.put("book", novelID);
             String url = params.getUrl();
-            Timber.d("getNovelSourceByID --> 通过获取小说来源:%s", url);
+            Timber.d("网络请求 --> 小说来源url:%s", url);
             GsonRequest request = new GsonRequest<>(url, NovelSource[].class, new Response.Listener<NovelSource[]>() {
                 @Override
                 public void onResponse(NovelSource[] response) {
@@ -84,9 +84,13 @@ public class ReadingNovelModel extends BaseModel {
                         novelSource.setRefreshDate(timeMillis);
                         novelSource.setSourceID(novelSource.get_id());
                     }
+                    if (locaSourceList != null && locaSourceList.size() > 0) {
+                        DataSupport.deleteAll(NovelSource.class, "novelID = ?", novelID);
+                    }
+
                     //将来源list保存到本地数据库
                     DataSupport.saveAll(sourceList);
-                    Timber.d("getNovelSourceByID --> 保存小说来源成功");
+                    Timber.d("数据库保存 --> 小说来源");
                     callback.onGetSourceSuccess(sourceList);
 
                 }
@@ -105,20 +109,20 @@ public class ReadingNovelModel extends BaseModel {
     @Override
     public void getNovelChaptersBySourceID(final String novelID, String sourceID, final ReadingNovelCallback callback) {
         //获取小说章节信息
-        List<NovelChapters> locaChapterList = DataSupport.where("sourceID = ? ", sourceID).find(NovelChapters.class);
+        final List<NovelChapters> locaChapterList = DataSupport.where("sourceID = ? ", sourceID).find(NovelChapters.class);
         final long timeMillis = System.currentTimeMillis();
         if (locaChapterList != null && locaChapterList.size() > 0 && timeMillis - locaChapterList.get(0).getRefreshDate() < Constants.MILLIS_DAY) {
             //获取小说目录的json字符串
             String chaptersJson = locaChapterList.get(0).getChaptersJson();
             //转换成实体类
             NovelChapters novelChapters = GsonUtils.fromJson(chaptersJson, NovelChapters.class);
-            Timber.d("getNovelChaptersBySourceID -->  数据库查询小说章节:%s", novelChapters.getName());
+            Timber.d("数据库查询 -->  小说章节 , 来源名：%s", novelChapters.getName());
             if (novelChapters != null) {//如果json转换成功那么将跳出此方法，否则将进行网络请求
                 locaChapterList.get(0).setChapters(novelChapters.getChapters());
                 callback.onGetChaptersSuccess(locaChapterList.get(0));
                 return;
             }
-            Timber.d("getNovelChaptersBySourceID --> 小说章节信息json转换失败");
+            Timber.d("json转换失败 --> 小说章节");
         }
 
         //拼接url
@@ -126,7 +130,7 @@ public class ReadingNovelModel extends BaseModel {
         params.setPath(HttpConstant.PATH_TOC + "/" + sourceID);
         params.put("view", "chapters");
         String url = params.getUrl();
-        Timber.d("getNovelChaptersBySourceID --> 网络获取小说章节信息:%s", url);
+        Timber.d("网络请求 --> 小说章节url:%s", url);
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -139,8 +143,13 @@ public class ReadingNovelModel extends BaseModel {
                     novelChapters.setChaptersJson(response);
                     novelChapters.setNovelID(novelID);
                     //保存目录信息保存到novelChapters表中
-                    boolean isSuccess = novelChapters.save();
-                    Timber.d("getNovelChaptersBySourceID --> 保存章节信息到本地:%s", isSuccess);
+                    if (locaChapterList != null && locaChapterList.size() > 0) {
+                        int i = novelChapters.update(locaChapterList.get(0).getId());
+                        Timber.d("数据库更新 --> 小说章节:%s", i);
+                    } else {
+                        boolean isSuccess = novelChapters.save();
+                        Timber.d("数据库保存 --> 小说章节:%s", isSuccess);
+                    }
                     callback.onGetChaptersSuccess(novelChapters);
                 } else {
                     callback.onGetSourceError();
@@ -170,12 +179,12 @@ public class ReadingNovelModel extends BaseModel {
         if (chapterContents != null && chapterContents.size() > 0) {
             chaptersInformation.setChapterContent(chapterContents.get(0));
             //通知视图显示内容
-            callback.onReadingChapterBodySuccess(startReadPosition,Direction, novelChapters);
-            Timber.d("readingChapterBodyByChapterLink --> 本地获取章节内容成功:1、novelID:%s,  2、sourceID:%s , 3、chapterLink:%s", novelID, sourceID, chapterContentLink);
+            callback.onReadingChapterBodySuccess(startReadPosition, Direction, novelChapters);
+            Timber.d("数据库查询 --> 章节内容,title:%s ,link:%s", chaptersInformation.getChapterContent().getTitle(), chapterContentLink);
         } else {
             try {
                 String url = HttpConstant.URL_CHAPTER + HttpConstant.PATH_CHAPTER + "/" + URLEncoder.encode(chapterContentLink, "UTF-8");
-                Timber.d("readingChapterBodyByChapterLink --> 网络请求章节内容:%s", url);
+                Timber.d("网络请求 --> 章节内容 url : %s", url);
                 GsonRequest request = new GsonRequest<>(url, NovelBodyBean.class, new Response.Listener<NovelBodyBean>() {
                     @Override
                     public void onResponse(NovelBodyBean response) {
@@ -190,8 +199,8 @@ public class ReadingNovelModel extends BaseModel {
                         boolean isSuccess = chapter.save();
                         chaptersInformation.setChapterContent(chapter);
                         //通知视图显示内容
-                        callback.onReadingChapterBodySuccess(startReadPosition,Direction, novelChapters);
-                        Timber.d("readingChapterBodyByChapterLink --> 数据库保存章节内容:%s", isSuccess);
+                        callback.onReadingChapterBodySuccess(startReadPosition, Direction, novelChapters);
+                        Timber.d("数据库保存 --> 章节内容 title:%s ,isSuccess:%s", chaptersInformation.getChapterContent().getTitle(), isSuccess);
                     }
                 }, new Response.ErrorListener() {
                     @Override

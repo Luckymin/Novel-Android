@@ -25,6 +25,7 @@
     <item name="tvNovelLastChapter" type="id"/>
     <item name="tvNovelClassifyAndWordCount" type="id"/>
     <item name="llReadOrAddBookRack" type="id"/>
+    <item name="btnAddBookshelf" type="id"/>
     <item name="btnStartReading" type="id"/>
     <item name="slidingNovelContainer" type="id"/>
     <item name="tvChapterBody" type="id"/>
