@@ -5,7 +5,7 @@
             android:id="@id/navigation_item_bookcase"
             android:icon="@mipmap/ic_launcher_novel"
             android:checked="true"
-            android:title="@string/navigation_item_book_rack"/>
+            android:title="@string/navigation_item_book_shelf"/>
         <item
             android:id="@id/navigation_item_classification"
             android:icon="@mipmap/ic_launcher_novel"

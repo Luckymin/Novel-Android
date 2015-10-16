@@ -18,19 +18,19 @@ import android.view.View;
 import com.startsmake.novel.Interfaces.OnClassificationCallback;
 import com.startsmake.novel.R;
 import com.startsmake.novel.ui.fragment.BookClassifyFragment;
-import com.startsmake.novel.ui.fragment.BookRackFragment;
+import com.startsmake.novel.ui.fragment.BookshelfFragment;
 import com.startsmake.novel.ui.fragment.BookRankingFragment;
 import com.startsmake.novel.utils.Utils;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnClassificationCallback {
 
-    public static final String EXTRA_SAVE_TAG = "com.minxiaoming.novel.saveCurrentTag";
-    public static final String SAVE_IS_SHOW_TAB_LAYOUT = "com.minxiaoming.novel.saveIsShowTabLayout";
+    public static final String EXTRA_SAVE_TAG = "com.startsmake.novel.saveCurrentTag";
+    public static final String SAVE_IS_SHOW_TAB_LAYOUT = "com.startsmake.novel.saveIsShowTabLayout";
 
     /**
      * 对应'书架'的Fragment的Index
      */
-    private static final String TAG_PAGE_BOOKRACK = Utils.getString(R.string.navigation_item_book_rack);
+    private static final String TAG_PAGE_BOOKSHELF = Utils.getString(R.string.navigation_item_book_shelf);
     /**
      * 对应'分类'的Fragment的Index
      */
@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String tag = TAG_PAGE_BOOKRACK;
+        String tag = TAG_PAGE_BOOKSHELF;
         if (savedInstanceState != null) {
             mCurrTag = null;
             tag = savedInstanceState.getString(EXTRA_SAVE_TAG);
@@ -136,8 +136,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      */
     public Fragment getFragmentInstance(String tag) {
         Fragment fragment = null;
-        if (TextUtils.equals(tag, TAG_PAGE_BOOKRACK)) {
-            fragment = BookRackFragment.newInstance();//book rack
+        if (TextUtils.equals(tag, TAG_PAGE_BOOKSHELF)) {
+            fragment = BookshelfFragment.newInstance();//bookshelf
         } else if (TextUtils.equals(tag, TAG_PAGE_CLASSIFICATION)) {
             fragment = BookClassifyFragment.newInstance();// classify
         } else if (TextUtils.equals(tag, TAG_PAGE_RANKING)) {
@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.navigation_item_bookcase:
                 isShowTabLayout = false;
                 mTabLayout.setVisibility(View.GONE);
-                gotoFragment(TAG_PAGE_BOOKRACK);
+                gotoFragment(TAG_PAGE_BOOKSHELF);
                 break;
             case R.id.navigation_item_classification:
                 isShowTabLayout = true;
@@ -174,7 +174,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void hideAllFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment bookRackFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_BOOKRACK);
+        Fragment bookRackFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_BOOKSHELF);
         if (bookRackFragment != null && !bookRackFragment.isHidden()) {
             transaction.hide(bookRackFragment);
         }
@@ -248,5 +248,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mTabLayout.setupWithViewPager(viewPager);
     }
 
+    public void toggleDrawer() {
+        if (mDrawerLayout == null) return;
+
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        } else {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
 
 }

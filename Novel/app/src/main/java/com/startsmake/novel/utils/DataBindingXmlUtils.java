@@ -1,7 +1,13 @@
 package com.startsmake.novel.utils;
 
 
+import android.databinding.BindingAdapter;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.R;
+import com.startsmake.novel.http.HttpConstant;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +19,18 @@ import java.util.Date;
  * Description:DataBinding xml使用的公共类
  */
 public class DataBindingXmlUtils {
+
+    @BindingAdapter("bind:coverImage")
+    public static void loadCoverImage(ImageView view, String url) {
+        String coverUrl = HttpConstant.URL_PICTURE + url.replaceAll("\\\\", "");
+        Glide.with(view.getContext()).load(coverUrl)
+                .asBitmap()
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(view);
+
+
+    }
 
 
     public static String novelClassifyAndWordCountFormat(String cat, int wordCount, int followerCount) {

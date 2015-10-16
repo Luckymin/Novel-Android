@@ -2,9 +2,12 @@ package com.startsmake.novel.ui.activity;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.transition.Fade;
 import android.transition.Transition;
@@ -17,8 +20,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.ActivityNovelIntroBinding;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelInfoBean;
+import com.startsmake.novel.bean.db.Books;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.model.NovelIntroModel;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * User:Shine
@@ -28,20 +36,18 @@ import com.startsmake.novel.model.NovelIntroModel;
 public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.NovelIntroCallback,
         com.startsmake.novel.ui.widget.NestedScrollView.OnScrollListener, View.OnClickListener {
 
-    public static final String EXTRA_NOVEL_ID = "com.minxiaoming.novel.novelID";
-    public static final String EXTRA_NOVEL_NAME = "com.minxiaoming.novel.novelName";
-    public static final String EXTRA_NOVEL_COVER_URL = "com.minxiaoming.novel.novelCoverUrl";
+    public static final String EXTRA_BOOKS = "com.startsmake.novel.books";
 
-    /*小说id*/
-    private String mNovelID;
-    /*小说名称 书名*/
-    private String mNovelName;
-    /*小说封面图片的URL*/
-    private String mNovelCoverUrl;
+    private Books mBooks;
     /*scrollview y*/
     private int mCurrentScrollY;
     /*当前activity是否因为内存不足被销毁过,以此来判断退出当前activity时是否需要SharedElementReturnTransition*/
     private boolean isDestroy;
+    /*是否已经加入书架*/
+    private int mBookshelfID;
+
+    private Handler mHandler;
+    private ProgressDialog mBookshelfDialog;
 
     private ActivityNovelIntroBinding mDataBinding;
 
@@ -60,16 +66,17 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
     private void initValue(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             isDestroy = false;
-            mNovelID = getIntent().getStringExtra(EXTRA_NOVEL_ID);
-            mNovelName = getIntent().getStringExtra(EXTRA_NOVEL_NAME);
-            mNovelCoverUrl = getIntent().getStringExtra(EXTRA_NOVEL_COVER_URL);
+            mBooks = getIntent().getParcelableExtra(EXTRA_BOOKS);
         } else {
             isDestroy = true;
-            mNovelID = savedInstanceState.getString(EXTRA_NOVEL_ID);
-            mNovelName = savedInstanceState.getString(EXTRA_NOVEL_NAME);
-            mNovelCoverUrl = savedInstanceState.getString(EXTRA_NOVEL_COVER_URL);
+            mBooks = savedInstanceState.getParcelable(EXTRA_BOOKS);
         }
-//        mMaxScrollViewMarginTop = getResources().getDimensionPixelOffset(R.dimen.actionBarSize);
+        mBooks.setNovelID(mBooks.get_id());
+        List<Books> bookshelfList = DataSupport.where("novelID = ?", mBooks.getNovelID()).find(Books.class);
+        if (bookshelfList != null && bookshelfList.size() > 0) {
+            mBookshelfID = bookshelfList.get(0).getId();
+        }
+        mHandler = new Handler();
         mModel = new NovelIntroModel();
     }
 
@@ -77,13 +84,12 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
         mDataBinding.btnStartReading.setOnClickListener(this);
         mDataBinding.btnAddBookshelf.setOnClickListener(this);
         mDataBinding.scrollView.setOnScrollListener(this);
-        Glide.with(this)
-                .load(HttpConstant.URL_PICTURE + mNovelCoverUrl)
-                .asBitmap()
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mDataBinding.ivNovelCover);
-        mModel.getNovelInfoByID(mNovelID, this);
+
+        mDataBinding.btnAddBookshelf.setText(mBookshelfID > 0 ? R.string.novel_remove_book_rack : R.string.novel_add_book_rack);
+
+        mDataBinding.setBook(mBooks);
+
+        mModel.getNovelInfoByID(mBooks.getNovelID(), this);
     }
 
     private void setupWindowAnimations() {
@@ -120,25 +126,39 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
     public void onScroll(int x, int y, int oldX, int oldY) {
         mCurrentScrollY = y;
 
-//        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mDataBinding.scrollView.getLayoutParams();
-//
-//        int marginTop = mMaxScrollViewMarginTop + (oldY - y);
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnStartReading:
-                ReaderNovelActivity.openActivity(this, mNovelID);
+                ReaderNovelActivity.openActivity(this, mBooks.getNovelID());
                 break;
             case R.id.btnAddBookshelf:
-                NovelInfoBean novelInfoBean = mDataBinding.getNovelInfo();
-                if (novelInfoBean == null) {
-                    return;
+                if (mBookshelfDialog == null) {
+                    mBookshelfDialog = new ProgressDialog(this);
+                    mBookshelfDialog.setMessage(getString(R.string.dialog_message_wait));
+                    mBookshelfDialog.setCanceledOnTouchOutside(false);
                 }
-                mDataBinding.btnAddBookshelf.setText("移出书架");
+                mBookshelfDialog.show();
 
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mBookshelfID > 0) {
+                            DataSupport.delete(Books.class, mBookshelfID);
+                            mBookshelfID = 0;
+                            mDataBinding.btnAddBookshelf.setText(R.string.novel_add_book_rack);
+                            Snackbar.make(mDataBinding.coordinatorLayout, "已从书架中移除《" + mBooks.getTitle() + "》", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            mBooks.save();
+                            mBookshelfID = mBooks.getId();
+                            mDataBinding.btnAddBookshelf.setText(R.string.novel_remove_book_rack);
+                            Snackbar.make(mDataBinding.coordinatorLayout, "已将《" + mBooks.getTitle() + "》添加到书架", Snackbar.LENGTH_LONG).show();
+                        }
+                        mBookshelfDialog.dismiss();
+                    }
+                }, 500);
                 break;
         }
     }
@@ -146,16 +166,14 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportActionBar().setTitle(mNovelName);
+        getSupportActionBar().setTitle(mBooks.getTitle());
         return true;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_NOVEL_ID, mNovelID);
-        outState.putString(EXTRA_NOVEL_NAME, mNovelName);
-        outState.putString(EXTRA_NOVEL_COVER_URL, mNovelCoverUrl);
+        outState.putParcelable(EXTRA_BOOKS, mBooks);
     }
 
 
@@ -168,12 +186,17 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
     }
 
 
-    public static void openActivity(Activity activity, View itemView, View coverView, String novelId, String novelName, String coverUrl) {
-        Intent intent = new Intent(activity, NovelIntroActivity.class);
-        intent.putExtra(EXTRA_NOVEL_ID, novelId);
-        intent.putExtra(EXTRA_NOVEL_NAME, novelName);
-        intent.putExtra(EXTRA_NOVEL_COVER_URL, coverUrl);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+    }
 
+    public static void openActivity(Activity activity, View itemView, View coverView, Books book) {
+        Intent intent = new Intent(activity, NovelIntroActivity.class);
+        intent.putExtra(EXTRA_BOOKS, book);
 
         ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity, coverView, activity.getString(R.string.transition_novel_cover));
 

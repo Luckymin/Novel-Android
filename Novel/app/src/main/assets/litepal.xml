@@ -2,11 +2,12 @@
 <litepal>
     <dbname value="novel"/>
 
-    <version value="11"/>
+    <version value="14"/>
 
     <list>
         <mapping class="com.startsmake.novel.bean.db.NovelSource"/>
         <mapping class="com.startsmake.novel.bean.db.NovelChapters"/>
         <mapping class="com.startsmake.novel.bean.db.ChapterContent"/>
+        <mapping class="com.startsmake.novel.bean.db.Books"/>
     </list>
 </litepal>

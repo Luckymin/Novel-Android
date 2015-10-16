@@ -18,6 +18,11 @@
     <!--分割线-->
     <color name="divider">#B6B6B6</color>
 
+    <color name="base_layout_color">#e6e6e6</color>
+
+    <color name="bookshelf_item_normal">#f7f4f1</color>
+    <color name="bookshelf_item_pressed">#f0ebe6</color>
+
 
     <color name="battery_view_color">#93764c</color>
 

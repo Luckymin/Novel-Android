@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelListBean;
+import com.startsmake.novel.bean.db.Books;
 import com.startsmake.novel.databinding.ItemNovelBinding;
 import com.startsmake.novel.http.HttpConstant;
 
@@ -28,7 +29,7 @@ public class NovelListAdapter extends RecyclerView.Adapter implements OnClickLis
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_LOADING = 2;
 
-    private final List<NovelListBean.BooksEntity> mData;
+    private final List<Books> mData;
     private final RequestManager mGlide;
     private final LayoutInflater mInflater;
 
@@ -61,14 +62,8 @@ public class NovelListAdapter extends RecyclerView.Adapter implements OnClickLis
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_ITEM) {
             NovelListViewHolder novelHolder = (NovelListViewHolder) holder;
-            NovelListBean.BooksEntity book = mData.get(position);
+            Books book = mData.get(position);
             novelHolder.getDataBinding().setBook(book);
-            String coverUrl = HttpConstant.URL_PICTURE + book.getCover().replaceAll("\\\\", "");
-            mGlide.load(coverUrl)
-                    .asBitmap()
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(novelHolder.getDataBinding().ivNovelCover);
             holder.itemView.setTag(novelHolder.getDataBinding().ivNovelCover);
         }
     }
@@ -97,7 +92,7 @@ public class NovelListAdapter extends RecyclerView.Adapter implements OnClickLis
         }
     }
 
-    public void addItems(List<NovelListBean.BooksEntity> data) {
+    public void addItems(List<Books> data) {
         mData.addAll(data);
         notifyDataSetChanged();
     }
@@ -144,7 +139,7 @@ public class NovelListAdapter extends RecyclerView.Adapter implements OnClickLis
     }
 
     public interface OnNovelListItemClickListener {
-        void onNovelItemClick(View itemView, View coverView, NovelListBean.BooksEntity book);
+        void onNovelItemClick(View itemView, View coverView, Books book);
     }
 
     public void setOnNovelListItemClickListener(OnNovelListItemClickListener onNovelListItemClickListener) {
