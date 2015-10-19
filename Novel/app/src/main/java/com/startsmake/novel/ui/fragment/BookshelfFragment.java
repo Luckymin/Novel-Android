@@ -1,10 +1,12 @@
 package com.startsmake.novel.ui.fragment;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.helper.OnStartDragListener;
+import com.startsmake.novel.helper.SimpleItemTouchHelperCallback;
 import com.startsmake.novel.ui.activity.MainActivity;
 import com.startsmake.novel.ui.activity.ReaderNovelActivity;
 import com.startsmake.novel.ui.adapter.BookshelfAdapter;
@@ -28,12 +32,14 @@ import java.util.List;
  * Date:2015-08-11
  * Description:
  */
-public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.BookShelfOnItemClickListener {
+public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.BookShelfOnItemClickListener, OnStartDragListener {
 
     private List<Books> mBookshelfList;
 
     private RecyclerView mRecyclerView;
     private BookshelfAdapter mAdapter;
+
+    private ItemTouchHelper mItemTouchHelper;
 
     public static Fragment newInstance() {
         Fragment fragment = new BookshelfFragment();
@@ -54,7 +60,7 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
     }
 
     private void initValue() {
-        mBookshelfList = DataSupport.findAll(Books.class);
+        mBookshelfList = DataSupport.order("orderIndex asc").find(Books.class);
     }
 
     private void initView(View view) {
@@ -69,6 +75,9 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
         mRecyclerView.addItemDecoration(new LinearSpaceItemDecoration(Utils.dpToPx(8)));
         mRecyclerView.setAdapter(mAdapter);
 
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
@@ -76,7 +85,7 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
         super.onHiddenChanged(hidden);
         if (!hidden) {
             List<Books> booksList = DataSupport.findAll(Books.class);
-            if (booksList != null && booksList.size() > 0) {
+            if (booksList != null) {
                 mBookshelfList.clear();
                 mBookshelfList.addAll(booksList);
                 mAdapter.notifyDataSetChanged();
@@ -94,6 +103,32 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
     @Override
     public void onBookShelfItemClick(View itemView, View coverView, Books book) {
         ReaderNovelActivity.openActivity(getActivity(), book.getNovelID());
+    }
 
+    @Override
+    public void onItemMove(Books fromBook, Books toBook) {
+        int fromOrderIndex = fromBook.getOrderIndex();
+        fromBook.setOrderIndex(toBook.getOrderIndex());
+        toBook.setOrderIndex(fromOrderIndex);
+
+        ContentValues fromValues = new ContentValues();
+        fromValues.put("orderIndex", fromBook.getOrderIndex());
+
+        ContentValues toValues = new ContentValues();
+        toValues.put("orderIndex", toBook.getOrderIndex());
+
+        DataSupport.update(Books.class, fromValues, fromBook.getId());
+        DataSupport.update(Books.class, toValues, toBook.getId());
+    }
+
+    @Override
+    public void onItemDismiss(Books book) {
+        book.delete();
+    }
+
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

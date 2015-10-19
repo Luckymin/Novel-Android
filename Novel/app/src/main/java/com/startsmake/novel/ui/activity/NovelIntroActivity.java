@@ -3,6 +3,7 @@ package com.startsmake.novel.ui.activity;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import com.startsmake.novel.model.NovelIntroModel;
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * User:Shine
@@ -152,6 +155,11 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
                             Snackbar.make(mDataBinding.coordinatorLayout, "已从书架中移除《" + mBooks.getTitle() + "》", Snackbar.LENGTH_LONG).show();
                         } else {
                             mBooks.save();
+                            mBooks.setOrderIndex(mBooks.getId());
+                            ContentValues values = new ContentValues();
+                            values.put("orderIndex", mBooks.getId());
+                            DataSupport.update(Books.class, values, mBooks.getId());
+
                             mBookshelfID = mBooks.getId();
                             mDataBinding.btnAddBookshelf.setText(R.string.novel_remove_book_rack);
                             Snackbar.make(mDataBinding.coordinatorLayout, "已将《" + mBooks.getTitle() + "》添加到书架", Snackbar.LENGTH_LONG).show();

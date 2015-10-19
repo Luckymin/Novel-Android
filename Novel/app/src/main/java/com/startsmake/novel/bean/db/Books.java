@@ -40,6 +40,8 @@ public class Books extends DataSupport implements Parcelable {
     private String shortIntro;
     private List<String> tags;
 
+    private int orderIndex;
+
     public void setCover(String cover) {
         this.cover = cover;
     }
@@ -140,6 +142,14 @@ public class Books extends DataSupport implements Parcelable {
         return novelID;
     }
 
+    public int getOrderIndex() {
+        return orderIndex;
+    }
+
+    public void setOrderIndex(int orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
     public void setNovelID(String novelID) {
         this.novelID = novelID;
     }
@@ -194,4 +204,6 @@ public class Books extends DataSupport implements Parcelable {
             return new Books[size];
         }
     };
+
+
 }

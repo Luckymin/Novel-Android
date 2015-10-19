@@ -4,6 +4,11 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.ui.adapter.BookshelfAdapter;
+
+import java.util.List;
+
 /**
  * User:Shine
  * Date:2015-08-12
@@ -20,6 +25,12 @@ public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view,
                                RecyclerView parent, RecyclerView.State state) {
+
+        if (parent.getAdapter() instanceof BookshelfAdapter) {
+            List<Books> booksList = ((BookshelfAdapter) parent.getAdapter()).getBookshelfList();
+            if (booksList == null || booksList.size() == 0) return;
+        }
+
         int currPosition = parent.getChildAdapterPosition(view);
         outRect.left = mSpace;
         outRect.right = mSpace;
@@ -28,4 +39,6 @@ public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
             outRect.bottom = mSpace;
         }
     }
+
+
 }

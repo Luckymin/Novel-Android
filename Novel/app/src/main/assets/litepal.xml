@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="novel"/>
 
-    <version value="14"/>
+    <version value="1"/>
 
     <list>
         <mapping class="com.startsmake.novel.bean.db.NovelSource"/>

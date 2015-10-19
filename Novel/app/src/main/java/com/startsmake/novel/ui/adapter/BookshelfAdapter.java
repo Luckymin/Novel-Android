@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.Books;
 import com.startsmake.novel.databinding.ItemNovelBinding;
-import com.startsmake.novel.http.HttpConstant;
+import com.startsmake.novel.helper.ItemTouchHelperAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +22,7 @@ import java.util.List;
  * Date:2015-10-14
  * Description:
  */
-public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickListener {
+public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickListener, ItemTouchHelperAdapter {
 
     private static final int EMPTY_BOOKSHELF_COUNT = 1;
     private static final int ITEM_TYPE_EMPTY = 1;
@@ -77,7 +77,7 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
 
     @Override
     public int getItemCount() {
-        if (mBookshelfList == null) {
+        if (mBookshelfList == null || mBookshelfList.size() == 0) {
             return EMPTY_BOOKSHELF_COUNT;
         }
         return mBookshelfList.size();
@@ -85,7 +85,7 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
 
     @Override
     public int getItemViewType(int position) {
-        if (mBookshelfList == null) {
+        if (mBookshelfList == null || mBookshelfList.size() == 0) {
             return ITEM_TYPE_EMPTY;
         }
         return ITEM_TYPE_BOOK;
@@ -96,6 +96,36 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
         if (mBookShelfOnItemClickListener != null) {
             mBookShelfOnItemClickListener.onBookShelfItemClick(view, (View) view.getTag(), mBookshelfList.get(position));
         }
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mBookshelfList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        if (mBookShelfOnItemClickListener != null) {
+            mBookShelfOnItemClickListener.onItemMove(mBookshelfList.get(fromPosition), mBookshelfList.get(toPosition));
+        }
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        Books books = mBookshelfList.get(position);
+        mBookshelfList.remove(books);
+        notifyItemRemoved(position);
+        if (mBookShelfOnItemClickListener != null) {
+            mBookShelfOnItemClickListener.onItemDismiss(books);
+        }
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return (mBookshelfList != null && mBookshelfList.size() > 0);
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return true;
     }
 
 
@@ -136,11 +166,19 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
         void onClickEmptyItem();
 
         void onBookShelfItemClick(View itemView, View coverView, Books book);
+
+        void onItemMove(Books fromBook, Books toBook);
+
+        void onItemDismiss(Books book);
     }
 
     public void setBookshelfList(List<Books> bookshelfList) {
-        if (bookshelfList != null && bookshelfList.size() > 0)
+        if (bookshelfList != null)
             mBookshelfList = bookshelfList;
+    }
+
+    public List<Books> getBookshelfList() {
+        return mBookshelfList;
     }
 
     public void setBookShelfOnItemClickListener(BookShelfOnItemClickListener bookShelfOnItemClickListener) {
