@@ -13,6 +13,7 @@
     <item name="navigation_item_bookcase" type="id"/>
     <item name="navigation_item_classification" type="id"/>
     <item name="navigation_item_ranking" type="id"/>
+    <item name="navigation_item_theme_book_list" type="id"/>
     <item name="vpClassification" type="id"/>
     <item name="pbLoading" type="id"/>
     <item name="llLoadingFailure" type="id"/>

@@ -11,6 +11,7 @@
     <string name="navigation_item_book_shelf">书架</string>
     <string name="navigation_item_classification">分类</string>
     <string name="navigation_item_ranking">排行榜</string>
+    <string name="navigation_item_theme_book_list">主题书单</string>
     <string name="novel_unit">本</string>
     <string name="classify_tab_all">全部</string>
     <string name="classify_tab_to_be_continued">连载中</string>

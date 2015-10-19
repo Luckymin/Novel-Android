@@ -23,6 +23,10 @@
     <color name="bookshelf_item_normal">#f7f4f1</color>
     <color name="bookshelf_item_pressed">#f0ebe6</color>
 
+    <color name="navigation_item_select_bg">#f0f0f0</color>
+    <color name="navigation_item_icon_tint_normal">#666666</color>
+    <color name="navigation_item_icon_tint_checked">@color/colorPrimary</color>
+
 
     <color name="battery_view_color">#93764c</color>
 

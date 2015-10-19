@@ -20,6 +20,7 @@ import com.startsmake.novel.R;
 import com.startsmake.novel.ui.fragment.BookClassifyFragment;
 import com.startsmake.novel.ui.fragment.BookshelfFragment;
 import com.startsmake.novel.ui.fragment.BookRankingFragment;
+import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
 import com.startsmake.novel.utils.Utils;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnClassificationCallback {
@@ -39,6 +40,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * 对应'排行榜'的Fragment的Index
      */
     private static final String TAG_PAGE_RANKING = Utils.getString(R.string.navigation_item_ranking);
+    /**
+     * 对应'排行榜'的Fragment的Index
+     */
+    private static final String TAG_PAGE_THEME_BOOK_LIST = Utils.getString(R.string.navigation_item_theme_book_list);
 
     /*当前显示的fragment的索引*/
     private String mCurrTag;
@@ -142,6 +147,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             fragment = BookClassifyFragment.newInstance();// classify
         } else if (TextUtils.equals(tag, TAG_PAGE_RANKING)) {
             fragment = BookRankingFragment.newInstance();// ranking
+        } else if (TextUtils.equals(tag, TAG_PAGE_THEME_BOOK_LIST)) {
+            fragment = ThemeBookListFragment.newInstance();
         }
         return fragment;
     }
@@ -167,6 +174,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 mTabLayout.setVisibility(View.GONE);
                 gotoFragment(TAG_PAGE_RANKING);
                 break;
+            case R.id.navigation_item_theme_book_list:
+                isShowTabLayout = false;
+                mTabLayout.setVisibility(View.GONE);
+                gotoFragment(TAG_PAGE_THEME_BOOK_LIST);
+                break;
         }
         return false;
 
@@ -185,6 +197,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Fragment rankingFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_RANKING);
         if (rankingFragment != null && !rankingFragment.isHidden()) {
             transaction.hide(rankingFragment);
+        }
+        Fragment themeBookListFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_THEME_BOOK_LIST);
+        if (themeBookListFragment != null && !themeBookListFragment.isHidden()) {
+            transaction.hide(themeBookListFragment);
         }
         transaction.commit();
     }
