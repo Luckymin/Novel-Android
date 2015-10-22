@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.ActivityNovelIntroBinding;
@@ -28,8 +29,6 @@ import com.startsmake.novel.model.NovelIntroModel;
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
-
-import timber.log.Timber;
 
 /**
  * User:Shine
@@ -50,7 +49,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
     private int mBookshelfID;
 
     private Handler mHandler;
-    private ProgressDialog mBookshelfDialog;
+    private MaterialDialog mBookshelfDialog;
 
     private ActivityNovelIntroBinding mDataBinding;
 
@@ -118,6 +117,14 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
     @Override
     public void getNovelInfoSuccess(NovelInfoBean bean) {
         mDataBinding.setNovelInfo(bean);
+
+        String coverUrl = HttpConstant.URL_PICTURE + bean.getCover().replaceAll("\\\\", "");
+        Glide.with(this).load(coverUrl)
+                .asBitmap()
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mDataBinding.ivNovelCover);
+
     }
 
     @Override
@@ -139,8 +146,10 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
                 break;
             case R.id.btnAddBookshelf:
                 if (mBookshelfDialog == null) {
-                    mBookshelfDialog = new ProgressDialog(this);
-                    mBookshelfDialog.setMessage(getString(R.string.dialog_message_wait));
+                    mBookshelfDialog = new MaterialDialog.Builder(this)
+                            .content(R.string.dialog_message_wait)
+                            .progress(true, 0)
+                            .build();
                     mBookshelfDialog.setCanceledOnTouchOutside(false);
                 }
                 mBookshelfDialog.show();

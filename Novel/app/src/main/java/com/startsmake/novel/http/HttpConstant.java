@@ -14,10 +14,13 @@ public class HttpConstant {
     public static final String PATH_BOOK = "/book";
     public static final String PATH_TOC = "/toc";
     public static final String PATH_CHAPTER = "/chapter";
+    public static final String PATH_BOOK_LIST= "/book-list";
+
     /*分类*/
     public static final String PATH_BOOK_CLASSIFICATION = "/cats";
     /*分类-小说列表*/
     public static final String PATH_BOOK_CLASSIFICATION_LIST_BY_TAG = PATH_BOOK + "/by-tag";
+
 
 
     public static final int NOVEL_LIST_LIMIT = 50;

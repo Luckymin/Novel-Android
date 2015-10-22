@@ -92,7 +92,7 @@ public class NovelListFragment extends BaseFragment implements NovelListModel.No
         mAdapter = new NovelListAdapter(getActivity(), Glide.with(this));
         mAdapter.setOnNovelListItemClickListener(this);
         mRvNovelList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRvNovelList.addItemDecoration(new LinearSpaceItemDecoration(Utils.dpToPx(8)));
+        mRvNovelList.addItemDecoration(new LinearSpaceItemDecoration(Utils.dpToPx(8), true));
         mRvNovelList.setAdapter(mAdapter);
         mRvNovelList.setOnRefreshEndListener(this);
         mRvNovelList.setHasFixedSize(true);
@@ -108,17 +108,21 @@ public class NovelListFragment extends BaseFragment implements NovelListModel.No
 
     @Override
     public void onNovelListSuccess(NovelListBean bean) {
+        if (mRvNovelList == null || mAdapter == null || mPbLoading == null) return;
+
         boolean isLoading = bean.getBooks().size() > 0;
         if (isLoading) {
             mAdapter.addItems(bean.getBooks());
         }
-        if (mRvNovelList != null)
-            mRvNovelList.setLoading(isLoading);
-        if (mAdapter.isShowLoading())
-            mAdapter.setShowLoading(false);
+        mRvNovelList.setRefreshEnabled(isLoading);
+        if (mRvNovelList.isRefresh()) {
+            mRvNovelList.setRefresh(false);
+        }
+
         if (mPbLoading.getVisibility() == View.VISIBLE) {
             mPbLoading.setVisibility(View.GONE);
         }
+
         runEnterAnimation(mRvNovelList);
     }
 
@@ -127,8 +131,6 @@ public class NovelListFragment extends BaseFragment implements NovelListModel.No
      */
     @Override
     public void onNovelListError() {
-        if (mRvNovelList != null)
-            mRvNovelList.setLoading(true);
         if (mAdapter.isShowLoading())
             mAdapter.setShowLoading(false);
 
@@ -159,7 +161,6 @@ public class NovelListFragment extends BaseFragment implements NovelListModel.No
      */
     @Override
     public void onEnd() {
-        mAdapter.setShowLoading(true);
         mCurrStart += HttpConstant.NOVEL_LIST_LIMIT;
         mModel.getNovelByTag(mClassifyTag, mTabType, mCurrStart, this);
     }

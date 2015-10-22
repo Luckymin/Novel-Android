@@ -1,4 +1,4 @@
-package com.startsmake.novel.ui.adapter;
+package com.startsmake.novel.ui.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

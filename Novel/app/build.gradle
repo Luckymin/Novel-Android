@@ -18,7 +18,9 @@ android {
         }
     }
 }
-
+repositories {
+    maven { url "https://jitpack.io" }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:design:23.0.1'
@@ -30,6 +32,9 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.18'
     compile 'org.litepal.android:core:1.2.1'
     compile 'com.jakewharton.timber:timber:3.1.0'
+    compile('com.afollestad.material-dialogs:core:0.8.4.2@aar') {
+        transitive = true
+    }
     compile project(':library')
 }
 

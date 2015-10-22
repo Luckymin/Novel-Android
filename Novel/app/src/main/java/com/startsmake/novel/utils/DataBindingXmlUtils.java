@@ -2,12 +2,11 @@ package com.startsmake.novel.utils;
 
 
 import android.databinding.BindingAdapter;
-import android.widget.ImageView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.R;
-import com.startsmake.novel.http.HttpConstant;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,18 +19,15 @@ import java.util.Date;
  */
 public class DataBindingXmlUtils {
 
-    @BindingAdapter("bind:coverImage")
-    public static void loadCoverImage(ImageView view, String url) {
-        String coverUrl = HttpConstant.URL_PICTURE + url.replaceAll("\\\\", "");
-        Glide.with(view.getContext()).load(coverUrl)
-                .asBitmap()
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view);
 
+    @BindingAdapter("collectCountText")
+    public static void setCollectCount(TextView textView, String collectCount) {
+        SpannableString spannableString = new SpannableString(collectCount + "人收藏");
 
+        spannableString.setSpan(new ForegroundColorSpan(textView.getContext().getResources().getColor(R.color.textSecondary)), collectCount.length(), spannableString.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textView.setText(spannableString);
     }
-
 
     public static String novelClassifyAndWordCountFormat(String cat, int wordCount, int followerCount) {
 //        novelInfo.cat + @string/novel_intro_separated + DataBindingXmlUtils.workCountTransition(novelInfo.wordCount) + @string/novel_intro_separated + DataBindingXmlUtils.toString(novelInfo.followerCount) + @string/novel_intro_follower_count_suffix

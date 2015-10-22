@@ -7,6 +7,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.startsmake.novel.ui.adapter.BaseLoadingAdapter;
+
 /**
  * User:Shine
  * Date:2015-06-02
@@ -14,7 +16,7 @@ import android.view.View;
  */
 public class FooterRecyclerView extends RecyclerView {
 
-    private boolean isLoading;
+    private boolean isRefreshEnabled;
     private OnRefreshEndListener mEndListener;
 
 
@@ -34,13 +36,13 @@ public class FooterRecyclerView extends RecyclerView {
     }
 
     private void init() {
-        isLoading = true;
+        isRefreshEnabled = true;
         setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
 
     public void onScrolled(int dx, int dy) {
-        if (isLoading) {
+        if (isRefreshEnabled && !isRefresh()) {
             if (getLayoutManager() instanceof LinearLayoutManager) {
                 linearLayoutScrolled(dy);
             } else if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
@@ -57,10 +59,10 @@ public class FooterRecyclerView extends RecyclerView {
             int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
             int totalItemCount = layoutManager.getItemCount();
             if (lastVisibleItem + 1 >= totalItemCount && dy > 0) {
-                isLoading = false;
                 if (mEndListener != null) {
                     mEndListener.onEnd();
                 }
+                setRefresh(true);
             }
         }
     }
@@ -75,21 +77,35 @@ public class FooterRecyclerView extends RecyclerView {
             int totalItemCount = layoutManager.getItemCount();
 
             if (lastVisibleItem + 1 >= totalItemCount && dy > 0) {
-                isLoading = false;
                 if (mEndListener != null) {
                     mEndListener.onEnd();
                 }
+                setRefresh(true);
             }
         }
     }
 
-
-    public boolean isLoading() {
-        return isLoading;
+    public void setRefresh(boolean refresh) {
+        if (getAdapter() instanceof BaseLoadingAdapter) {
+            BaseLoadingAdapter adapter = (BaseLoadingAdapter) getAdapter();
+            adapter.setShowLoading(refresh);
+        }
     }
 
-    public void setLoading(boolean boo) {
-        this.isLoading = boo;
+    public boolean isRefresh() {
+        if (getAdapter() instanceof BaseLoadingAdapter) {
+            BaseLoadingAdapter adapter = (BaseLoadingAdapter) getAdapter();
+            return adapter.isShowLoading();
+        }
+        return false;
+    }
+
+    public boolean isRefreshEnabled() {
+        return isRefreshEnabled;
+    }
+
+    public void setRefreshEnabled(boolean enabled) {
+        this.isRefreshEnabled = enabled;
     }
 
     public void setOnRefreshEndListener(OnRefreshEndListener endListener) {
@@ -97,6 +113,6 @@ public class FooterRecyclerView extends RecyclerView {
     }
 
     public interface OnRefreshEndListener {
-        public void onEnd();
+        void onEnd();
     }
 }

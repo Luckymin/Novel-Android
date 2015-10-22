@@ -72,10 +72,11 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
         mAdapter.setBookShelfOnItemClickListener(this);
         mAdapter.setBookshelfList(mBookshelfList);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new LinearSpaceItemDecoration(Utils.dpToPx(8)));
+        mRecyclerView.addItemDecoration(new LinearSpaceItemDecoration(Utils.dpToPx(8),true));
         mRecyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }

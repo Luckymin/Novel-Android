@@ -3,12 +3,16 @@
     <item name="drawerLayout" type="id"/>
     <item name="recyclerView" type="id"/>
     <item name="rootLayout" type="id"/>
+    <item name="viewPager" type="id"/>
+    <item name="swipeRefreshLayout" type="id"/>
     <item name="toolbar" type="id"/>
     <item name="coordinatorLayout" type="id"/>
     <item name="appBarLayout" type="id"/>
     <item name="fabBtn" type="id"/>
     <item name="contentFrame" type="id"/>
     <item name="tabLayout" type="id"/>
+    <item name="classifyTabLayout" type="id"/>
+    <item name="themeBookListTabLayout" type="id"/>
     <item name="navigation" type="id"/>
     <item name="navigation_item_bookcase" type="id"/>
     <item name="navigation_item_classification" type="id"/>
@@ -36,4 +40,8 @@
     <item name="tvPagePosition" type="id"/>
     <item name="tvCurrentTime" type="id"/>
     <item name="batterView" type="id"/>
+    <item name="tvEmptyHint" type="id"/>
+    <item name="ivBookListCover" type="id"/>
+    <item name="tvBookListTitle" type="id"/>
+    <item name="tvCollectorCount" type="id"/>
 </resources>

@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.Books;
 import com.startsmake.novel.databinding.ItemNovelBinding;
 import com.startsmake.novel.helper.ItemTouchHelperAdapter;
+import com.startsmake.novel.http.HttpConstant;
+import com.startsmake.novel.ui.adapter.viewholder.EmptyViewHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -71,6 +74,13 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
             bookshelfViewHolder.getDataBinding().setBook(books);
 
             holder.itemView.setTag(bookshelfViewHolder.getDataBinding().ivNovelCover);
+
+            String coverUrl = HttpConstant.URL_PICTURE + books.getCover().replaceAll("\\\\", "");
+            mGlide.load(coverUrl)
+                    .asBitmap()
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(bookshelfViewHolder.getDataBinding().ivNovelCover);
         }
 
     }
@@ -128,7 +138,6 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
         return true;
     }
 
-
     static class BookshelfViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ItemNovelBinding mDataBinding;
@@ -152,13 +161,6 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
         public void onClick(View v) {
             if (mOnClickListener != null)
                 mOnClickListener.onClick(v, getAdapterPosition());
-        }
-    }
-
-    static class EmptyViewHolder extends RecyclerView.ViewHolder {
-
-        public EmptyViewHolder(View itemView) {
-            super(itemView);
         }
     }
 

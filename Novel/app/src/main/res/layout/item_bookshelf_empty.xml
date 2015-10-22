@@ -17,6 +17,7 @@
 
 
     <TextView
+        android:id="@id/tvEmptyHint"
         style="@style/TextView"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/margin_small"

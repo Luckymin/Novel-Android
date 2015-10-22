@@ -21,6 +21,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import timber.log.Timber;
+
 /**
  * An implementation of {@link ItemTouchHelper.Callback} that enables basic drag & drop and
  * swipe-to-dismiss. Drag events are automatically started by an item long-press.<br/>
@@ -60,7 +62,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             return makeMovementFlags(dragFlags, swipeFlags);
         } else {
             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            final int swipeFlags = ItemTouchHelper.START;
             return makeMovementFlags(dragFlags, swipeFlags);
         }
     }
@@ -70,16 +72,48 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (source.getItemViewType() != target.getItemViewType()) {
             return false;
         }
-
         // Notify the adapter of the move
         mAdapter.onItemMove(source.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
+    public void onSwiped(final RecyclerView.ViewHolder viewHolder, int i) {
         // Notify the adapter of the dismissal
+
         mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+//        mAdapter.onItemDismiss(position);
+//        new MaterialDialog.Builder(viewHolder.itemView.getContext())
+//                .title("提示")
+//                .content(mAdapter.getDialogContent(position))
+//                .positiveText("确定")
+//                .negativeText("取消")
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+//                        mAdapter.onItemDismiss(position);
+//                    }
+//                })
+//                .onNegative(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+//                        viewHolder.itemView.animate()
+//                                .alpha(ALPHA_FULL)
+//                                .translationX(0)
+//                                .setDuration(200)
+//                                .setListener(new AnimatorListenerAdapter() {
+//                                    @Override
+//                                    public void onAnimationEnd(Animator animation) {
+//                                        mAdapter.onItemChanged(position);
+//                                    }
+//                                }).start();
+//
+////                        clearView((RecyclerView) viewHolder.itemView.getParent(), viewHolder);
+////                        mAdapter.onItemChanged(position);
+//                    }
+//                })
+//                .show();
+
     }
 
     @Override
@@ -89,10 +123,12 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             final float alpha = ALPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
             viewHolder.itemView.setAlpha(alpha);
             viewHolder.itemView.setTranslationX(dX);
+
         } else {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     }
+
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
@@ -111,8 +147,9 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-
         viewHolder.itemView.setAlpha(ALPHA_FULL);
+
+        Timber.i("clearView");
 
         if (viewHolder instanceof ItemTouchHelperViewHolder) {
             // Tell the view holder it's time to restore the idle state
@@ -120,4 +157,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             itemViewHolder.onItemClear();
         }
     }
+
+
 }

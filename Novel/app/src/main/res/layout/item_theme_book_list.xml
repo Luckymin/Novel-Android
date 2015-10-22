@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bookList"
+            type="com.startsmake.novel.bean.db.BookList"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_list_item_height"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@id/ivBookListCover"
+            android:layout_width="68dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginTop="4dp"
+            tools:src="@mipmap/ic_launcher_novel"/>
+
+
+        <TextView
+            android:id="@id/tvBookListTitle"
+            style="@style/TextView"
+            android:layout_alignTop="@id/ivBookListCover"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_toRightOf="@id/ivBookListCover"
+            android:singleLine="true"
+            android:text="@{bookList.title}"
+            />
+
+        <TextView
+            android:id="@id/tvCollectorCount"
+            style="@style/TextView"
+            android:layout_alignBottom="@id/ivBookListCover"
+            android:layout_toRightOf="@id/ivBookListCover"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            app:collectCountText="@{bookList.collectorCount}"/>
+
+    </RelativeLayout>
+</layout>

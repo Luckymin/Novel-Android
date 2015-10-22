@@ -80,9 +80,17 @@ public abstract class BaseModel {
      * 读取小说章节内容根据小说章节标题
      *
      * @param startReadPosition
-     * @param novelChapters 小说章节信息，包含章节列表，来源id，等等内容
+     * @param novelChapters     小说章节信息，包含章节列表，来源id，等等内容
      */
     public void readingChapterBodyByChapterLink(int startReadPosition, int Direction, NovelChapters novelChapters, ReadingNovelModel.ReadingNovelCallback callback) {
+    }
 
+    /**
+     * 获取主题书单
+     *
+     * @param pagerType 类型 - 我的收藏，本周最热，最新发布，最多收藏
+     * @param start     从第几行开始读取数据
+     */
+    public void getThemeBookList(int pagerType, int start,ThemeBookPagerModel.ThemeBookPagerCallback callback) {
     }
 }

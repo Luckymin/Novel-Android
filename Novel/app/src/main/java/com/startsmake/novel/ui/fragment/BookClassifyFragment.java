@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.startsmake.novel.Interfaces.OnClassificationCallback;
+import com.startsmake.novel.Interfaces.OnInitTabLayoutCallback;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.BookClassificationBean;
 import com.startsmake.novel.model.BookClassificationModel;
@@ -63,12 +63,6 @@ public class BookClassifyFragment extends BaseFragment implements View.OnClickLi
         mModel.toObtainCats(this);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-
     /**
      * 获取分类成功
      */
@@ -79,7 +73,7 @@ public class BookClassifyFragment extends BaseFragment implements View.OnClickLi
         mPagerAdapter.addFragment(SexClassifyGridFragment.newInstance((ArrayList<BookClassificationBean.BookCatsEntity>) catsBean.getMale()), getString(R.string.classification_tab_name_male));
         mPagerAdapter.addFragment(SexClassifyGridFragment.newInstance((ArrayList<BookClassificationBean.BookCatsEntity>) catsBean.getFemale()), getString(R.string.classification_tab_name_female));
         mVpClassification.setAdapter(mPagerAdapter);
-        ((OnClassificationCallback) getActivity()).initialTabLayout(mVpClassification);
+        ((OnInitTabLayoutCallback) getActivity()).initialClassifyTabLayout(mVpClassification);
     }
 
     /**
@@ -98,11 +92,6 @@ public class BookClassifyFragment extends BaseFragment implements View.OnClickLi
             mPbLoading.setVisibility(View.VISIBLE);
             mLlLoadingFailure.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
 }

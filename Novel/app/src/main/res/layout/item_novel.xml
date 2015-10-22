@@ -24,8 +24,7 @@
                 android:id="@id/ivNovelCover"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:transitionName="@string/transition_novel_cover"
-                app:coverImage="@{book.cover}"/>
+                android:transitionName="@string/transition_novel_cover"/>
 
             <TextView
                 android:id="@id/tvNovelName"

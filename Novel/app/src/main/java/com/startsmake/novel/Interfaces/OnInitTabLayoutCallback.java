@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
  * Date:2015-08-11
  * Description:用于分类fragment调用父activity中的方法
  */
-public interface OnClassificationCallback {
-    void initialTabLayout(ViewPager viewPager);
+public interface OnInitTabLayoutCallback {
+    void initialClassifyTabLayout(ViewPager viewPager);
+    void initialThemeBookListTabLayout(ViewPager viewPager);
 }

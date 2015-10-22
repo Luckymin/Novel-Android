@@ -24,64 +24,59 @@ import java.util.List;
  * Date:2015-08-12
  * Description:
  */
-public class NovelListAdapter extends RecyclerView.Adapter implements OnClickListener {
+public class NovelListAdapter extends BaseLoadingAdapter<Books> implements OnClickListener {
 
     private static final int TYPE_ITEM = 1;
-    private static final int TYPE_LOADING = 2;
 
-    private final List<Books> mData;
     private final RequestManager mGlide;
-    private final LayoutInflater mInflater;
 
-    //是否显示底部圆圈进度条
-    private boolean isShowLoading = false;
     //item点击监听
     private OnNovelListItemClickListener mOnNovelListItemClickListener;
 
     public NovelListAdapter(Context context, RequestManager glide) {
+        super(context);
         this.mGlide = glide;
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = new ArrayList<>();
     }
 
+
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            ItemNovelBinding dataBinding = DataBindingUtil.inflate(mInflater, R.layout.item_novel, parent, false);
+            ItemNovelBinding dataBinding = DataBindingUtil.inflate(inflater, R.layout.item_novel, parent, false);
             NovelListViewHolder holder = new NovelListViewHolder(dataBinding.getRoot(), this);
             holder.setDataBinding(dataBinding);
             return holder;
-        } else {
-            View view = mInflater.inflate(R.layout.item_list_footer_loading, parent, false);
-            return new LoadingViewHolder(view);
         }
-
+        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == TYPE_ITEM) {
+        if (holder != null && getItemViewType(position) == TYPE_ITEM) {
             NovelListViewHolder novelHolder = (NovelListViewHolder) holder;
             Books book = mData.get(position);
             novelHolder.getDataBinding().setBook(book);
             holder.itemView.setTag(novelHolder.getDataBinding().ivNovelCover);
+
+            String coverUrl = HttpConstant.URL_PICTURE + book.getCover().replaceAll("\\\\", "");
+            mGlide.load(coverUrl)
+                    .asBitmap()
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(novelHolder.getDataBinding().ivNovelCover);
+
         }
     }
+
 
     @Override
     public int getItemCount() {
-        int count = isShowLoading ? mData.size() + 1 : mData.size();
-        return count;
+        return super.getItemCount();
     }
 
-
     @Override
-    public int getItemViewType(int position) {
-        if (isShowLoading && position == getItemCount() - 1) {
-            return TYPE_LOADING;
-        } else {
-            return TYPE_ITEM;
-        }
+    protected int getItemType(int position) {
+        return TYPE_ITEM;
     }
 
     /*Item 点击监听*/
@@ -90,25 +85,6 @@ public class NovelListAdapter extends RecyclerView.Adapter implements OnClickLis
         if (mOnNovelListItemClickListener != null) {
             mOnNovelListItemClickListener.onNovelItemClick(view, (View) view.getTag(), mData.get(position));
         }
-    }
-
-    public void addItems(List<Books> data) {
-        mData.addAll(data);
-        notifyDataSetChanged();
-    }
-
-    /*添加或删除底部item*/
-    public void setShowLoading(boolean isShow) {
-        isShowLoading = isShow;
-        if (isShow)
-            notifyItemInserted(mData.size() + 1);
-        else
-            notifyItemRemoved(mData.size() + 1);
-    }
-
-
-    public boolean isShowLoading() {
-        return isShowLoading;
     }
 
     public static class NovelListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

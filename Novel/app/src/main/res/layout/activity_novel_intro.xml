@@ -60,8 +60,7 @@
                         android:layout_marginLeft="@dimen/margin_medium"
                         android:layout_marginRight="@dimen/margin_small"
                         android:layout_marginTop="@dimen/margin_medium"
-                        android:transitionName="@string/transition_novel_cover"
-                        app:coverImage="@{book.cover}"/>
+                        android:transitionName="@string/transition_novel_cover"/>
 
                     <TextView
                         android:id="@id/tvNovelName"

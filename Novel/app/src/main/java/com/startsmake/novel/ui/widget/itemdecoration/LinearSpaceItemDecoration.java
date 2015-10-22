@@ -17,9 +17,11 @@ import java.util.List;
 public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
     private final int mSpace;
+    private final boolean mHorizontalMargin;
 
-    public LinearSpaceItemDecoration(int space) {
+    public LinearSpaceItemDecoration(int space, boolean horizontalMargin) {
         this.mSpace = space;
+        this.mHorizontalMargin = horizontalMargin;
     }
 
     @Override
@@ -32,9 +34,14 @@ public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         int currPosition = parent.getChildAdapterPosition(view);
-        outRect.left = mSpace;
-        outRect.right = mSpace;
+        if (mHorizontalMargin) {
+            outRect.left = mSpace;
+            outRect.right = mSpace;
+        }
+
         outRect.top = mSpace;
+
+
         if (currPosition == state.getItemCount() - 1) {
             outRect.bottom = mSpace;
         }

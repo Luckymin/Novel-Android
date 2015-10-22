@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.startsmake.novel.Interfaces.OnClassificationCallback;
+import com.startsmake.novel.Interfaces.OnInitTabLayoutCallback;
 import com.startsmake.novel.R;
 import com.startsmake.novel.ui.fragment.BookClassifyFragment;
 import com.startsmake.novel.ui.fragment.BookshelfFragment;
@@ -23,10 +23,11 @@ import com.startsmake.novel.ui.fragment.BookRankingFragment;
 import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
 import com.startsmake.novel.utils.Utils;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnClassificationCallback {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnInitTabLayoutCallback {
 
     public static final String EXTRA_SAVE_TAG = "com.startsmake.novel.saveCurrentTag";
-    public static final String SAVE_IS_SHOW_TAB_LAYOUT = "com.startsmake.novel.saveIsShowTabLayout";
+    public static final String SAVE_IS_SHOW_CLASSIFY_TAB_LAYOUT = "com.startsmake.novel.saveIsShowClassifyTabLayout";
+    public static final String SAVE_IS_SHOW_THEME_BOOK_TAB_LAYOUT = "com.startsmake.novel.saveIsShowThemeBookTabLayout";
 
     /**
      * 对应'书架'的Fragment的Index
@@ -48,12 +49,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     /*当前显示的fragment的索引*/
     private String mCurrTag;
     /**/
-    private boolean isShowTabLayout = false;
+    private boolean isShowClassifyTabLayout = false;
+    private boolean isShowThemeBookTabLayout = false;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigation;
-    private TabLayout mTabLayout;
+    private TabLayout mClassifyTabLayout;
+    private TabLayout mThemeBookTabLayout;
 
 
     @Override
@@ -65,7 +68,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (savedInstanceState != null) {
             mCurrTag = null;
             tag = savedInstanceState.getString(EXTRA_SAVE_TAG);
-            isShowTabLayout = savedInstanceState.getBoolean(SAVE_IS_SHOW_TAB_LAYOUT);
+            isShowClassifyTabLayout = savedInstanceState.getBoolean(SAVE_IS_SHOW_CLASSIFY_TAB_LAYOUT);
+            isShowThemeBookTabLayout = savedInstanceState.getBoolean(SAVE_IS_SHOW_THEME_BOOK_TAB_LAYOUT);
         }
         initToolbar();
         initInstances();
@@ -77,8 +81,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void initInstances() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mNavigation = (NavigationView) findViewById(R.id.navigation);
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mTabLayout.setVisibility(isShowTabLayout ? View.VISIBLE : View.GONE);
+        mClassifyTabLayout = (TabLayout) findViewById(R.id.classifyTabLayout);
+        mThemeBookTabLayout = (TabLayout) findViewById(R.id.themeBookListTabLayout);
+        mClassifyTabLayout.setVisibility(isShowClassifyTabLayout ? View.VISIBLE : View.GONE);
+        mThemeBookTabLayout.setVisibility(isShowThemeBookTabLayout ? View.VISIBLE : View.GONE);
         mNavigation.setNavigationItemSelectedListener(this);//侧边栏item选择监听
         mDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, mDrawerLayout, mToolbar, R.string.hello_world, R.string.hello_world);
 //        mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -160,23 +166,31 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         menuItem.setChecked(true);
         switch (id) {
             case R.id.navigation_item_bookcase:
-                isShowTabLayout = false;
-                mTabLayout.setVisibility(View.GONE);
+                isShowClassifyTabLayout = false;
+                isShowThemeBookTabLayout = false;
+                mClassifyTabLayout.setVisibility(View.GONE);
+                mThemeBookTabLayout.setVisibility(View.GONE);
                 gotoFragment(TAG_PAGE_BOOKSHELF);
                 break;
             case R.id.navigation_item_classification:
-                isShowTabLayout = true;
-                mTabLayout.setVisibility(View.VISIBLE);
+                isShowClassifyTabLayout = true;
+                isShowThemeBookTabLayout = false;
+                mClassifyTabLayout.setVisibility(View.VISIBLE);
+                mThemeBookTabLayout.setVisibility(View.GONE);
                 gotoFragment(TAG_PAGE_CLASSIFICATION);
                 break;
             case R.id.navigation_item_ranking:
-                isShowTabLayout = false;
-                mTabLayout.setVisibility(View.GONE);
+                isShowClassifyTabLayout = false;
+                isShowThemeBookTabLayout = false;
+                mClassifyTabLayout.setVisibility(View.GONE);
+                mThemeBookTabLayout.setVisibility(View.GONE);
                 gotoFragment(TAG_PAGE_RANKING);
                 break;
             case R.id.navigation_item_theme_book_list:
-                isShowTabLayout = false;
-                mTabLayout.setVisibility(View.GONE);
+                isShowClassifyTabLayout = false;
+                isShowThemeBookTabLayout = true;
+                mClassifyTabLayout.setVisibility(View.GONE);
+                mThemeBookTabLayout.setVisibility(View.VISIBLE);
                 gotoFragment(TAG_PAGE_THEME_BOOK_LIST);
                 break;
         }
@@ -256,12 +270,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_SAVE_TAG, mCurrTag);
-        outState.putBoolean(SAVE_IS_SHOW_TAB_LAYOUT, isShowTabLayout);
+        outState.putBoolean(SAVE_IS_SHOW_CLASSIFY_TAB_LAYOUT, isShowClassifyTabLayout);
     }
 
     @Override
-    public void initialTabLayout(ViewPager viewPager) {
-        mTabLayout.setupWithViewPager(viewPager);
+    public void initialClassifyTabLayout(ViewPager viewPager) {
+        mClassifyTabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void initialThemeBookListTabLayout(ViewPager viewPager) {
+        mThemeBookTabLayout.setupWithViewPager(viewPager);
     }
 
     public void toggleDrawer() {

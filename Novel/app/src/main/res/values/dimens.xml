@@ -10,6 +10,7 @@
     <dimen name="novel_list_item_height">96dp</dimen>
     <dimen name="navigation_header_height">192dp</dimen>
     <dimen name="bookshelf_item_empty">56dp</dimen>
+    <dimen name="book_list_item_height">88dp</dimen>
     <!--圆形进度条的宽和高-->
     <dimen name="progress_bar_size">48dp</dimen>
 
