@@ -4,13 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.View;
@@ -21,6 +19,7 @@ import android.view.ViewTreeObserver;
 import com.startsmake.novel.R;
 import com.startsmake.novel.ui.adapter.TabLayoutViewPagerAdapter;
 import com.startsmake.novel.ui.fragment.NovelListFragment;
+import com.startsmake.novel.ui.widget.RevealBackgroundView;
 import com.startsmake.novel.utils.Constants;
 import com.startsmake.novel.utils.Utils;
 
@@ -45,6 +44,7 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
     private AppBarLayout mAppBarLayout;
     private ViewPager mVpNovelClassifyFiltrate;
     private ViewGroup mRootLayout;
+    private RevealBackgroundView mRevealBackgroundView;
 
     private boolean isExit = false;
 
@@ -86,14 +86,39 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
     private void setupWindowAnimations(Bundle savedInstanceState) {
         if (savedInstanceState != null) return;
 
-        mRootLayout.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                mRootLayout.getViewTreeObserver().removeOnPreDrawListener(this);
-                animateRevealShow(mRootLayout);
-                return true;
-            }
-        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mRootLayout.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    mRootLayout.getViewTreeObserver().removeOnPreDrawListener(this);
+                    animateRevealShow(mRootLayout);
+                    return true;
+                }
+            });
+        } else {
+            mRevealBackgroundView = (RevealBackgroundView) findViewById(R.id.revealBackgroundView);
+            mRevealBackgroundView.setOnStateChangeListener(new RevealBackgroundView.OnStateChangeListener() {
+                @Override
+                public void onStateChange(int state) {
+                    if (RevealBackgroundView.STATE_FINISHED == state){
+                        mVpNovelClassifyFiltrate.setVisibility(View.VISIBLE);
+                        mRevealBackgroundView.setVisibility(View.GONE);
+                    }else {
+                        mVpNovelClassifyFiltrate.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+            mRevealBackgroundView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    mRevealBackgroundView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mRevealBackgroundView.startFromLocation(mStartingLocation);
+                    return true;
+                }
+
+            });
+        }
 
     }
 
@@ -102,12 +127,11 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void animateRevealShow(ViewGroup viewRoot) {
-        int cx = mStartingLocation[0];
-        int cy = mStartingLocation[1];
         int finalRadius = Math.max(viewRoot.getWidth(), viewRoot.getHeight());
-        Animator anim = ViewAnimationUtils.createCircularReveal(viewRoot, cx, cy, 0, finalRadius);
+        Animator anim = ViewAnimationUtils.createCircularReveal(viewRoot, mStartingLocation[0], mStartingLocation[1], 0, finalRadius);
         anim.setDuration(Constants.SHOW_ANIMATE_REVEAL_DURATION);
         anim.start();
+
     }
 
     /**
@@ -180,10 +204,12 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
         intent.putExtra(EXTRA_CLASSIFY_TAG, tag);
         intent.putExtra(EXTRA_CLASSIFY_STARTING_LOCATION, startingLocation);
 
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity);
-        ActivityCompat.startActivity(activity, intent, transitionActivityOptions.toBundle());
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+//        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity);
+//        ActivityCompat.startActivity(activity, intent, transitionActivityOptions.toBundle());
 //        activity.startActivity(intent);
-//        activity.overridePendingTransition(0,0);
+
     }
 
 

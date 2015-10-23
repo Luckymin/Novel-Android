@@ -17,7 +17,6 @@ import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.ui.adapter.viewholder.EmptyViewHolder;
 import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
 
-
 /**
  * User:Shine
  * Date:2015-10-20
@@ -40,7 +39,6 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
         mGlide = glide;
         mPagerType = pagerType;
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
@@ -133,6 +131,5 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
 
         void onItemDismiss(Books book);
     }
-
 
 }

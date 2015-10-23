@@ -1,5 +1,8 @@
 package com.startsmake.novel.bean.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
 
 /**
@@ -7,7 +10,7 @@ import org.litepal.crud.DataSupport;
  * Date:2015-10-20
  * Description:
  */
-public class BookList extends DataSupport {
+public class BookList extends DataSupport implements Parcelable {
 
     /**
      * _id : 533040bf16cda3e5180001ab
@@ -20,7 +23,8 @@ public class BookList extends DataSupport {
      * desc : 不看就后悔
      */
 
-    private String _id;
+    public int id;
+    public String _id;
     private String author;
     private String gender;
     private int bookCount;
@@ -89,8 +93,59 @@ public class BookList extends DataSupport {
         return cover;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDesc() {
         return desc;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this._id);
+        dest.writeString(this.author);
+        dest.writeString(this.gender);
+        dest.writeInt(this.bookCount);
+        dest.writeString(this.title);
+        dest.writeString(this.collectorCount);
+        dest.writeString(this.cover);
+        dest.writeString(this.desc);
+    }
+
+    public BookList() {
+    }
+
+    protected BookList(Parcel in) {
+        this.id = in.readInt();
+        this._id = in.readString();
+        this.author = in.readString();
+        this.gender = in.readString();
+        this.bookCount = in.readInt();
+        this.title = in.readString();
+        this.collectorCount = in.readString();
+        this.cover = in.readString();
+        this.desc = in.readString();
+    }
+
+    public static final Parcelable.Creator<BookList> CREATOR = new Parcelable.Creator<BookList>() {
+        public BookList createFromParcel(Parcel source) {
+            return new BookList(source);
+        }
+
+        public BookList[] newArray(int size) {
+            return new BookList[size];
+        }
+    };
 }

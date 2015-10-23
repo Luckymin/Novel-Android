@@ -1,5 +1,6 @@
 package com.startsmake.novel.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,9 @@ import android.view.ViewTreeObserver;
 import com.bumptech.glide.Glide;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.BookList;
+import com.startsmake.novel.bean.db.Books;
 import com.startsmake.novel.model.ThemeBookPagerModel;
+import com.startsmake.novel.ui.activity.BookListDetailsActivity;
 import com.startsmake.novel.ui.adapter.ThemeBookPagerAdapter;
 import com.startsmake.novel.ui.widget.FooterRecyclerView;
 import com.startsmake.novel.ui.widget.itemdecoration.LinearSpaceItemDecoration;
@@ -27,7 +30,7 @@ import java.util.List;
  * Date:2015-10-20
  * Description:
  */
-public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPagerModel.ThemeBookPagerCallback {
+public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPagerModel.ThemeBookPagerCallback, ThemeBookPagerAdapter.OnThemeBookItemClickListener {
 
     private static final String EXTRA_PAGER_TYPE = "com.startsmake.novel.pagerType";
 
@@ -75,6 +78,7 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
 
         if (mAdapter == null) {
             mAdapter = new ThemeBookPagerAdapter(getActivity(), Glide.with(this), mPagerType);
+            mAdapter.setOnThemeBookItemClickListener(this);
         }
         mRecyclerView.setAdapter(mAdapter);
 
@@ -95,13 +99,16 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
 
     }
 
-
     @Override
     protected void onViewInitializeVisible(boolean isVisibleHint) {
         mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    mSwipeRefreshLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                } else {
+                    mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
                 mSwipeRefreshLayout.setRefreshing(true);
                 mModel.getThemeBookList(mPagerType, mStartRow, ThemeBookPagerFragment.this);
             }
@@ -131,4 +138,25 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
     public void getThemeBookListError() {
 
     }
+
+    @Override
+    public void onClickEmptyItem() {
+
+    }
+
+    @Override
+    public void onThemeBookItemClick(View itemView, View coverView, BookList bookList) {
+        BookListDetailsActivity.openActivity(getActivity(), itemView, bookList);
+    }
+
+    @Override
+    public void onItemMove(Books fromBook, Books toBook) {
+
+    }
+
+    @Override
+    public void onItemDismiss(Books book) {
+
+    }
+
 }

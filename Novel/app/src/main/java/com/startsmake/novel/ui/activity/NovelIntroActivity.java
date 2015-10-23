@@ -6,10 +6,12 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
@@ -95,10 +97,12 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
     }
 
     private void setupWindowAnimations() {
-        scheduleStartPostponedTransition(mDataBinding.scrollView);
-        Transition transition = getWindow().getSharedElementEnterTransition();
-        transition.setDuration(400);
-        transition.setStartDelay(200);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            scheduleStartPostponedTransition(mDataBinding.scrollView);
+            Transition transition = getWindow().getSharedElementEnterTransition();
+            transition.setDuration(400);
+            transition.setStartDelay(200);
+        }
     }
 
     private void scheduleStartPostponedTransition(final View sharedElement) {
@@ -149,6 +153,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
                     mBookshelfDialog = new MaterialDialog.Builder(this)
                             .content(R.string.dialog_message_wait)
                             .progress(true, 0)
+                            .widgetColor(getResources().getColor(R.color.colorPrimary))
                             .build();
                     mBookshelfDialog.setCanceledOnTouchOutside(false);
                 }
@@ -196,7 +201,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
 
     @Override
     public void onBackPressed() {
-        if (isDestroy || mCurrentScrollY >= mDataBinding.ivNovelCover.getBottom()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && (isDestroy || mCurrentScrollY >= mDataBinding.ivNovelCover.getBottom())) {
             getWindow().setSharedElementReturnTransition(new Fade());
         }
         super.onBackPressed();
@@ -215,7 +220,8 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
         Intent intent = new Intent(activity, NovelIntroActivity.class);
         intent.putExtra(EXTRA_BOOKS, book);
 
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity, coverView, activity.getString(R.string.transition_novel_cover));
+
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, coverView, activity.getString(R.string.transition_novel_cover));
 
         /*Pair<View, String> itemPair = Pair.create(itemView, activity.getString(R.string.transition_novel_list_item));
         Pair<View, String> coverPair = Pair.create(coverView, activity.getString(R.string.transition_novel_cover));

@@ -44,4 +44,5 @@
     <item name="ivBookListCover" type="id"/>
     <item name="tvBookListTitle" type="id"/>
     <item name="tvCollectorCount" type="id"/>
+    <item name="revealBackgroundView" type="id"/>
 </resources>
