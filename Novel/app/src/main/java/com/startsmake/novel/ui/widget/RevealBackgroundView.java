@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 
-import timber.log.Timber;
-
 /**
  * User:Shine
  * Date:2015-10-22
@@ -66,7 +64,6 @@ public class RevealBackgroundView extends View {
         changeState(STATE_FILL_STARTED);
         mStartLocationX = tapLocationOnScreen[0];
         mStartLocationY = tapLocationOnScreen[1];
-        Timber.i("width:%s , height : %s",getWidth(),getHeight());
         mRevealAnimator = ObjectAnimator.ofInt(this, "currentRadius", getWidth() + getHeight()).setDuration(FILL_TIME);
         mRevealAnimator.setInterpolator(INTERPOLATOR);
         mRevealAnimator.addListener(new AnimatorListenerAdapter() {
@@ -104,7 +101,6 @@ public class RevealBackgroundView extends View {
         if (mCurrState == STATE_FINISHED) {
             canvas.drawRect(0, 0, getWidth(), getHeight(), mFillPaint);
         } else {
-            Timber.i("radius : %s",mCurrentRadius);
             canvas.drawCircle(mStartLocationX, mStartLocationY, mCurrentRadius, mFillPaint);
         }
     }

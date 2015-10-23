@@ -75,7 +75,7 @@
                         android:id="@id/tvNovelClassifyAndWordCount"
                         style="@style/TextView"
                         android:layout_below="@id/tvNovelName"
-                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/novel_intro_text_vertical_margin"
                         android:layout_toRightOf="@id/ivNovelCover"
                         android:text="@{novelInfo == null ?  novelInfo.cat : DataBindingXmlUtils.novelClassifyAndWordCountFormat(novelInfo.cat,novelInfo.wordCount,novelInfo.followerCount)}"
                         />
@@ -84,7 +84,7 @@
                         android:id="@id/tvNovelAuthor"
                         style="@style/TextView"
                         android:layout_below="@id/tvNovelClassifyAndWordCount"
-                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/novel_intro_text_vertical_margin"
                         android:layout_toRightOf="@id/ivNovelCover"
                         android:text="@{novelInfo.author}"
                         android:textColor="@color/colorPrimary"
@@ -103,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvNovelAuthor"
-                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/novel_intro_text_vertical_margin"
                         android:layout_toRightOf="@id/ivNovelCover"
                         android:text="@{novelInfo.lastChapter}"
                         android:textColor="@color/colorPrimary"/>
