@@ -1,12 +1,18 @@
 package com.startsmake.novel.utils;
 
 
+import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.TextView;
 
+import com.startsmake.novel.NovelApplication;
 import com.startsmake.novel.R;
+import com.startsmake.novel.bean.db.Book;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,14 +26,35 @@ import java.util.Date;
 public class DataBindingXmlUtils {
 
 
-    @BindingAdapter("collectCountText")
-    public static void setCollectCount(TextView textView, String collectCount) {
-        SpannableString spannableString = new SpannableString(collectCount + "人收藏");
-
-        spannableString.setSpan(new ForegroundColorSpan(textView.getContext().getResources().getColor(R.color.textSecondary)), collectCount.length(), spannableString.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        textView.setText(spannableString);
+    @BindingAdapter("visibilityByEmpty")
+    public static void setVisibility(View view, String str) {
+        view.setVisibility(TextUtils.isEmpty(str) ? view.GONE : View.VISIBLE);
     }
+
+    @BindingAdapter("latelyFollowerAndWordCount")
+    public static void setLatelyFollowerAndWordCount(TextView textView, Book book) {
+        SpannableStringBuilder latelyFollowerText = setForegroundColor(book.getLatelyFollower(), "人在追");
+        String wordCountStr = workCountTransition(book.getWordCount());
+
+        SpannableStringBuilder wordCountText = setForegroundColor(wordCountStr, "万字");
+
+        textView.setText(latelyFollowerText.append(" | ").append(wordCountText));
+
+    }
+
+    public static SpannableStringBuilder setForegroundColor(Object front, String back) {
+        String frontStr = String.valueOf(front);
+        int start;
+        if ((start = frontStr.indexOf(back)) != -1) {
+            frontStr = frontStr.substring(0, start);
+        }
+
+        Context context = NovelApplication.getContext();
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(frontStr + back);
+        spannableString.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), 0, frontStr.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableString;
+    }
+
 
     public static String novelClassifyAndWordCountFormat(String cat, int wordCount, int followerCount) {
 //        novelInfo.cat + @string/novel_intro_separated + DataBindingXmlUtils.workCountTransition(novelInfo.wordCount) + @string/novel_intro_separated + DataBindingXmlUtils.toString(novelInfo.followerCount) + @string/novel_intro_follower_count_suffix

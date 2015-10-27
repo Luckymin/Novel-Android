@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.ui.adapter.BookshelfAdapter;
 
 import java.util.List;
@@ -18,10 +18,24 @@ public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
     private final int mSpace;
     private final boolean mHorizontalMargin;
+    private final boolean mTopMargin;
+
+    public LinearSpaceItemDecoration(int space) {
+        this.mSpace = space;
+        this.mHorizontalMargin = true;
+        this.mTopMargin = true;
+    }
 
     public LinearSpaceItemDecoration(int space, boolean horizontalMargin) {
         this.mSpace = space;
         this.mHorizontalMargin = horizontalMargin;
+        this.mTopMargin = true;
+    }
+
+    public LinearSpaceItemDecoration(int space, boolean horizontalMargin, boolean TopMargin) {
+        this.mSpace = space;
+        this.mHorizontalMargin = horizontalMargin;
+        this.mTopMargin = TopMargin;
     }
 
     @Override
@@ -29,7 +43,7 @@ public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
                                RecyclerView parent, RecyclerView.State state) {
 
         if (parent.getAdapter() instanceof BookshelfAdapter) {
-            List<Books> booksList = ((BookshelfAdapter) parent.getAdapter()).getBookshelfList();
+            List<Book> booksList = ((BookshelfAdapter) parent.getAdapter()).getBookshelfList();
             if (booksList == null || booksList.size() == 0) return;
         }
 
@@ -39,7 +53,11 @@ public class LinearSpaceItemDecoration extends RecyclerView.ItemDecoration {
             outRect.right = mSpace;
         }
 
-        outRect.top = mSpace;
+        if (currPosition == 0 && !mTopMargin) {
+            outRect.top = 0;
+        } else {
+            outRect.top = mSpace;
+        }
 
 
         if (currPosition == state.getItemCount() - 1) {

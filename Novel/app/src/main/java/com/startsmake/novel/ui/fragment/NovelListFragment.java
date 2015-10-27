@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelListBean;
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.model.NovelListModel;
 import com.startsmake.novel.ui.activity.NovelIntroActivity;
@@ -169,7 +169,7 @@ public class NovelListFragment extends BaseFragment implements NovelListModel.No
      * 小说列表 item点击监听
      */
     @Override
-    public void onNovelItemClick(View itemView, View coverView, Books book) {
+    public void onNovelItemClick(View itemView, View coverView, Book book) {
         NovelIntroActivity.openActivity(getActivity(), itemView, coverView, book);
     }
 

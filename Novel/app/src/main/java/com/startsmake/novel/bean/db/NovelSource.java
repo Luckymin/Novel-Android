@@ -1,5 +1,6 @@
 package com.startsmake.novel.bean.db;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 /**
@@ -21,7 +22,8 @@ public class NovelSource extends DataSupport {
      * lastChapter : 第一百八十章  要不咱不考了吧
      * updated : 2015-08-08T02:53:37.338Z
      */
-    public String _id;
+    @Column(ignore = true)
+    private String _id;
     private String link;
     private String host;
     private String name;

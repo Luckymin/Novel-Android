@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="bookList"
+            type="com.startsmake.novel.bean.BookListDetailsBean.BookListEntity"/>
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium">
+
+
+        <TextView
+            android:id="@id/tvBookListTitle"
+            style="@style/TextView"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="@{bookList.title}"
+            android:transitionName="@string/transition_book_list_title"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@id/tvBookListDesc"
+            style="@style/TextView"
+            android:layout_below="@id/tvBookListTitle"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@{bookList.desc}"
+            android:textColor="@color/textSecondary"
+            android:textSize="14dp"/>
+
+
+        <ImageView
+            android:id="@id/ivUserCover"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/tvBookListDesc"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"/>
+
+        <TextView
+            android:id="@id/tvAuthorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ivUserCover"
+            android:layout_alignTop="@id/ivUserCover"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_toRightOf="@id/ivUserCover"
+            android:gravity="center"
+            android:text="@{bookList.author.nickname}"
+            android:textColor="@color/user_name_color"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@id/btnCollect"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@id/tvAuthorName"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:background="@drawable/btn_novel_add_book_rack"
+            android:text="收藏"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="10sp"/>
+
+    </RelativeLayout>
+</layout>

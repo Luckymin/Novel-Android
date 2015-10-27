@@ -41,6 +41,10 @@
             android:name="com.startsmake.novel.ui.activity.ReaderNovelActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.startsmake.novel.ui.activity.BookListDetailsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
     </application>
 

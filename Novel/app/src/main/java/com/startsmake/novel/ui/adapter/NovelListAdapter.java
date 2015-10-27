@@ -11,20 +11,16 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
-import com.startsmake.novel.bean.NovelListBean;
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.databinding.ItemNovelBinding;
 import com.startsmake.novel.http.HttpConstant;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User:Shine
  * Date:2015-08-12
  * Description:
  */
-public class NovelListAdapter extends BaseLoadingAdapter<Books> implements OnClickListener {
+public class NovelListAdapter extends BaseLoadingAdapter<Book> implements OnClickListener {
 
     private static final int TYPE_ITEM = 1;
 
@@ -54,7 +50,7 @@ public class NovelListAdapter extends BaseLoadingAdapter<Books> implements OnCli
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder != null && getItemViewType(position) == TYPE_ITEM) {
             NovelListViewHolder novelHolder = (NovelListViewHolder) holder;
-            Books book = mData.get(position);
+            Book book = mData.get(position);
             novelHolder.getDataBinding().setBook(book);
             holder.itemView.setTag(novelHolder.getDataBinding().ivNovelCover);
 
@@ -115,7 +111,7 @@ public class NovelListAdapter extends BaseLoadingAdapter<Books> implements OnCli
     }
 
     public interface OnNovelListItemClickListener {
-        void onNovelItemClick(View itemView, View coverView, Books book);
+        void onNovelItemClick(View itemView, View coverView, Book book);
     }
 
     public void setOnNovelListItemClickListener(OnNovelListItemClickListener onNovelListItemClickListener) {

@@ -6,12 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.BookList;
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.databinding.ItemThemeBookListBinding;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.ui.adapter.viewholder.EmptyViewHolder;
@@ -22,7 +24,7 @@ import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
  * Date:2015-10-20
  * Description:
  */
-public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
+public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> implements OnClickListener {
 
     private static final int EMPTY_COLLECT_COUNT = 1;
 
@@ -57,7 +59,7 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
             return holder;
         } else if (viewType == TYPE_ITEM) {
             ItemThemeBookListBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_theme_book_list, parent, false);
-            ThemeBookViewHolder holder = new ThemeBookViewHolder(binding.getRoot());
+            ThemeBookViewHolder holder = new ThemeBookViewHolder(binding.getRoot(), this);
             holder.setDataBinding(binding);
             return holder;
         }
@@ -72,6 +74,8 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
 
             BookList bookList = mData.get(position);
             themeBookViewHolder.getDataBinding().setBookList(bookList);
+
+            themeBookViewHolder.itemView.setTag(themeBookViewHolder.getDataBinding().tvBookListTitle);
 
             String coverUrl = HttpConstant.URL_PICTURE + bookList.getCover().replaceAll("\\\\", "");
             mGlide.load(coverUrl)
@@ -100,12 +104,30 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
         }
     }
 
-    static class ThemeBookViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onClick(View view, int position) {
+        if (mOnThemeBookItemClickListener != null) {
+            TextView textView = (TextView) view.getTag();
+            mOnThemeBookItemClickListener.onThemeBookItemClick(view, textView, mData.get(position));
+        }
+    }
+
+    static class ThemeBookViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ItemThemeBookListBinding mDataBinding;
+        private OnClickListener mOnClickListener;
 
-        public ThemeBookViewHolder(View itemView) {
+        public ThemeBookViewHolder(View itemView, OnClickListener listener) {
             super(itemView);
+            mOnClickListener = listener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mOnClickListener != null) {
+                mOnClickListener.onClick(v, getAdapterPosition());
+            }
         }
 
         public ItemThemeBookListBinding getDataBinding() {
@@ -127,9 +149,9 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> {
 
         void onThemeBookItemClick(View itemView, View coverView, BookList book);
 
-        void onItemMove(Books fromBook, Books toBook);
+        void onItemMove(Book fromBook, Book toBook);
 
-        void onItemDismiss(Books book);
+        void onItemDismiss(Book book);
     }
 
 }

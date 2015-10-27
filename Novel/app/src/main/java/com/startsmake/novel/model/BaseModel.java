@@ -91,6 +91,14 @@ public abstract class BaseModel {
      * @param pagerType 类型 - 我的收藏，本周最热，最新发布，最多收藏
      * @param start     从第几行开始读取数据
      */
-    public void getThemeBookList(int pagerType, int start,ThemeBookPagerModel.ThemeBookPagerCallback callback) {
+    public void getThemeBookList(int pagerType, int start, ThemeBookPagerModel.ThemeBookPagerCallback callback) {
+    }
+
+    /**
+     * 获取书单详情
+     *
+     * @param bookListID 书单id
+     */
+    public void getBookListDetails(String bookListID, BookListDetailsModel.BookListDetailsListener callback) {
     }
 }

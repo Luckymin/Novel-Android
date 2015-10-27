@@ -2,13 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="false">
         <shape>
-            <solid android:color="@color/bookshelf_item_normal"/>
+            <solid android:color="@color/default_item_normal"/>
         </shape>
     </item>
 
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/bookshelf_item_pressed"/>
+            <solid android:color="@color/default_item_pressed"/>
         </shape>
     </item>
 

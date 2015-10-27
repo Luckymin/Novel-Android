@@ -3,6 +3,7 @@ package com.startsmake.novel.ui.fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.startsmake.novel.R;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.bean.db.BookList;
-import com.startsmake.novel.bean.db.Books;
 import com.startsmake.novel.model.ThemeBookPagerModel;
 import com.startsmake.novel.ui.activity.BookListDetailsActivity;
 import com.startsmake.novel.ui.adapter.ThemeBookPagerAdapter;
@@ -42,6 +44,8 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
     //从第几行开始获取数据
     private int mStartRow = 0;
 
+    private TextView mTextView;
+
     public static Fragment newInstance(int pagerType) {
         Fragment fragment = new ThemeBookPagerFragment();
         Bundle bundle = new Bundle();
@@ -66,6 +70,8 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
     @Override
     protected void onViewCreated(View view) {
         super.onViewCreated(view);
+
+        mTextView = (TextView) view.findViewById(R.id.text);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (FooterRecyclerView) view.findViewById(R.id.recyclerView);
@@ -136,7 +142,14 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
 
     @Override
     public void getThemeBookListError() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        if (mRecyclerView.isRefresh()) {
+            mRecyclerView.setRefresh(false);
+        }
 
+        Snackbar.make(mSwipeRefreshLayout, R.string.network_failure_hint_text, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -145,17 +158,17 @@ public class ThemeBookPagerFragment extends BaseFragment implements ThemeBookPag
     }
 
     @Override
-    public void onThemeBookItemClick(View itemView, View coverView, BookList bookList) {
-        BookListDetailsActivity.openActivity(getActivity(), itemView, bookList);
+    public void onThemeBookItemClick(View itemView, View titleView, BookList bookList) {
+        BookListDetailsActivity.openActivity(getActivity(), itemView, titleView, bookList.get_id());
     }
 
     @Override
-    public void onItemMove(Books fromBook, Books toBook) {
+    public void onItemMove(Book fromBook, Book toBook) {
 
     }
 
     @Override
-    public void onItemDismiss(Books book) {
+    public void onItemDismiss(Book book) {
 
     }
 

@@ -11,7 +11,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.databinding.ItemNovelBinding;
 import com.startsmake.novel.helper.ItemTouchHelperAdapter;
 import com.startsmake.novel.http.HttpConstant;
@@ -35,7 +35,7 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
     private RequestManager mGlide;
 
     private BookShelfOnItemClickListener mBookShelfOnItemClickListener;
-    private List<Books> mBookshelfList;
+    private List<Book> mBookshelfList;
 
     public BookshelfAdapter(Context context, RequestManager glide) {
         mInflater = LayoutInflater.from(context);
@@ -69,7 +69,7 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
         if (viewType == ITEM_TYPE_BOOK) {
-            Books books = mBookshelfList.get(position);
+            Book books = mBookshelfList.get(position);
             BookshelfViewHolder bookshelfViewHolder = (BookshelfViewHolder) holder;
             bookshelfViewHolder.getDataBinding().setBook(books);
 
@@ -120,7 +120,7 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
 
     @Override
     public void onItemDismiss(int position) {
-        Books books = mBookshelfList.get(position);
+        Book books = mBookshelfList.get(position);
         mBookshelfList.remove(books);
         notifyItemRemoved(position);
         if (mBookShelfOnItemClickListener != null) {
@@ -167,19 +167,19 @@ public class BookshelfAdapter extends RecyclerView.Adapter implements OnClickLis
     public interface BookShelfOnItemClickListener {
         void onClickEmptyItem();
 
-        void onBookShelfItemClick(View itemView, View coverView, Books book);
+        void onBookShelfItemClick(View itemView, View coverView, Book book);
 
-        void onItemMove(Books fromBook, Books toBook);
+        void onItemMove(Book fromBook, Book toBook);
 
-        void onItemDismiss(Books book);
+        void onItemDismiss(Book book);
     }
 
-    public void setBookshelfList(List<Books> bookshelfList) {
+    public void setBookshelfList(List<Book> bookshelfList) {
         if (bookshelfList != null)
             mBookshelfList = bookshelfList;
     }
 
-    public List<Books> getBookshelfList() {
+    public List<Book> getBookshelfList() {
         return mBookshelfList;
     }
 

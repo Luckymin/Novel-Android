@@ -6,6 +6,8 @@
     <string name="novel_intro_separated">&#160;|&#160;</string>
     <string name="transition_novel_cover">transitionNovelCover</string>
     <string name="transition_novel_list_item">transitionNovelListItem</string>
+    <string name="transition_book_list_item">transitionBookListItem</string>
+    <string name="transition_book_list_title">transitionBookListTitle</string>
 
 
     <string name="navigation_item_book_shelf">书架</string>
@@ -27,6 +29,8 @@
     <string name="network_failure_btn_retry_text">重试</string>
     <string name="novel_add_book_rack">加入书架</string>
     <string name="novel_remove_book_rack">移出书架</string>
+    <string name="collectCountText">人收藏</string>
+    <string name="latelyFollowerText">人在追</string>
     <string name="novel_start_reading_book">开始阅读</string>
     <string name="novel_intro_follower_count_suffix">人看过</string>
     <string name="date_updated_suffix">&#160;更新</string>
@@ -34,4 +38,5 @@
     <string name="dialog_message_wait">请稍等...</string>
     <string name="bookshelf_add_novel_text">添加你喜欢的小说</string>
     <string name="theme_book_list_empty_hint">添加你喜欢的书单</string>
+    <string name="book_list_details_text">书单详情</string>
 </resources>

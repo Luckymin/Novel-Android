@@ -19,9 +19,10 @@
     <color name="divider">#B6B6B6</color>
 
     <color name="base_layout_color">#f4f4f4</color>
+    <color name="user_name_color">#a58d5e</color>
 
-    <color name="bookshelf_item_normal">#f7f4f1</color>
-    <color name="bookshelf_item_pressed">#f0ebe6</color>
+    <color name="default_item_normal">@android:color/white</color>
+    <color name="default_item_pressed">#f0ebe6</color>
 
     <color name="navigation_item_select_bg">#f0f0f0</color>
     <color name="navigation_item_icon_tint_normal">#666666</color>

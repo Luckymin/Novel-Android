@@ -3,6 +3,7 @@ package com.startsmake.novel.bean.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 /**
@@ -11,7 +12,6 @@ import org.litepal.crud.DataSupport;
  * Description:
  */
 public class BookList extends DataSupport implements Parcelable {
-
     /**
      * _id : 533040bf16cda3e5180001ab
      * author : Dear‘’ 冷情绪、
@@ -22,9 +22,10 @@ public class BookList extends DataSupport implements Parcelable {
      * cover : /agent/http://image.cmfu.com/books/1209977/1209977.jpg
      * desc : 不看就后悔
      */
-
-    public int id;
-    public String _id;
+    @Column(ignore = true)
+    private String _id;
+    private String bookListID;
+    private int id;
     private String author;
     private String gender;
     private int bookCount;
@@ -105,6 +106,17 @@ public class BookList extends DataSupport implements Parcelable {
         return desc;
     }
 
+    public String getBookListID() {
+        return bookListID;
+    }
+
+    public void setBookListID(String bookListID) {
+        this.bookListID = bookListID;
+    }
+
+    public BookList() {
+    }
+
 
     @Override
     public int describeContents() {
@@ -113,8 +125,9 @@ public class BookList extends DataSupport implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
         dest.writeString(this._id);
+        dest.writeString(this.bookListID);
+        dest.writeInt(this.id);
         dest.writeString(this.author);
         dest.writeString(this.gender);
         dest.writeInt(this.bookCount);
@@ -124,12 +137,10 @@ public class BookList extends DataSupport implements Parcelable {
         dest.writeString(this.desc);
     }
 
-    public BookList() {
-    }
-
     protected BookList(Parcel in) {
-        this.id = in.readInt();
         this._id = in.readString();
+        this.bookListID = in.readString();
+        this.id = in.readInt();
         this.author = in.readString();
         this.gender = in.readString();
         this.bookCount = in.readInt();
@@ -139,7 +150,7 @@ public class BookList extends DataSupport implements Parcelable {
         this.desc = in.readString();
     }
 
-    public static final Parcelable.Creator<BookList> CREATOR = new Parcelable.Creator<BookList>() {
+    public static final Creator<BookList> CREATOR = new Creator<BookList>() {
         public BookList createFromParcel(Parcel source) {
             return new BookList(source);
         }

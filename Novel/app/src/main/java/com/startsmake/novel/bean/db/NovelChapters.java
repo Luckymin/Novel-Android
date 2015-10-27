@@ -1,5 +1,6 @@
 package com.startsmake.novel.bean.db;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class NovelChapters extends DataSupport {
      * _id : 55832b6c0cdaddae4e48c0cb
      * updated : 2015-08-06T11:29:38.034Z
      */
-    public String _id;
+    @Column(ignore = true)
+    private String _id;
     private int id;
     private List<ChaptersInformation> chapters;
     private String host;

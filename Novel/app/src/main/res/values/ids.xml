@@ -11,6 +11,7 @@
     <item name="fabBtn" type="id"/>
     <item name="contentFrame" type="id"/>
     <item name="tabLayout" type="id"/>
+    <item name="line" type="id"/>
     <item name="classifyTabLayout" type="id"/>
     <item name="themeBookListTabLayout" type="id"/>
     <item name="navigation" type="id"/>
@@ -45,4 +46,8 @@
     <item name="tvBookListTitle" type="id"/>
     <item name="tvCollectorCount" type="id"/>
     <item name="revealBackgroundView" type="id"/>
+    <item name="ivUserCover" type="id"/>
+    <item name="tvBookListDesc" type="id"/>
+    <item name="tvAuthorName" type="id"/>
+    <item name="btnCollect" type="id"/>
 </resources>

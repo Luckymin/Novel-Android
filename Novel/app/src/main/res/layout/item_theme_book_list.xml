@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="com.startsmake.novel.utils.DataBindingXmlUtils"/>
+
         <variable
             name="bookList"
             type="com.startsmake.novel.bean.db.BookList"/>
@@ -14,8 +16,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_list_item_height"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:background="@drawable/bg_item_default_selector"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:transitionName="@string/transition_book_list_item">
 
         <ImageView
             android:id="@id/ivBookListCover"
@@ -36,6 +40,7 @@
             android:layout_toRightOf="@id/ivBookListCover"
             android:singleLine="true"
             android:text="@{bookList.title}"
+            android:transitionName="@string/transition_book_list_title"
             />
 
         <TextView
@@ -45,9 +50,9 @@
             android:layout_toRightOf="@id/ivBookListCover"
             android:drawablePadding="4dp"
             android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
-            app:collectCountText="@{bookList.collectorCount}"/>
-
+            android:text="@{DataBindingXmlUtils.setForegroundColor(bookList.collectorCount,@string/collectCountText)}"
+            android:textColor="@color/textSecondary"
+            android:textSize="14sp"/>
+        `
     </RelativeLayout>
 </layout>

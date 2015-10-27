@@ -1,8 +1,6 @@
 package com.startsmake.novel.ui.activity;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -24,7 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.startsmake.novel.ActivityNovelIntroBinding;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.NovelInfoBean;
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.model.NovelIntroModel;
 
@@ -42,7 +40,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
 
     public static final String EXTRA_BOOKS = "com.startsmake.novel.books";
 
-    private Books mBooks;
+    private Book mBooks;
     /*scrollview y*/
     private int mCurrentScrollY;
     /*当前activity是否因为内存不足被销毁过,以此来判断退出当前activity时是否需要SharedElementReturnTransition*/
@@ -76,7 +74,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
             mBooks = savedInstanceState.getParcelable(EXTRA_BOOKS);
         }
         mBooks.setNovelID(mBooks.get_id());
-        List<Books> bookshelfList = DataSupport.where("novelID = ?", mBooks.getNovelID()).find(Books.class);
+        List<Book> bookshelfList = DataSupport.where("novelID = ?", mBooks.getNovelID()).find(Book.class);
         if (bookshelfList != null && bookshelfList.size() > 0) {
             mBookshelfID = bookshelfList.get(0).getId();
         }
@@ -163,7 +161,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
                     @Override
                     public void run() {
                         if (mBookshelfID > 0) {
-                            DataSupport.delete(Books.class, mBookshelfID);
+                            DataSupport.delete(Book.class, mBookshelfID);
                             mBookshelfID = 0;
                             mDataBinding.btnAddBookshelf.setText(R.string.novel_add_book_rack);
                             Snackbar.make(mDataBinding.coordinatorLayout, "已从书架中移除《" + mBooks.getTitle() + "》", Snackbar.LENGTH_LONG).show();
@@ -172,7 +170,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
                             mBooks.setOrderIndex(mBooks.getId());
                             ContentValues values = new ContentValues();
                             values.put("orderIndex", mBooks.getId());
-                            DataSupport.update(Books.class, values, mBooks.getId());
+                            DataSupport.update(Book.class, values, mBooks.getId());
 
                             mBookshelfID = mBooks.getId();
                             mDataBinding.btnAddBookshelf.setText(R.string.novel_remove_book_rack);
@@ -216,7 +214,7 @@ public class NovelIntroActivity extends BaseActivity implements NovelIntroModel.
         }
     }
 
-    public static void openActivity(Activity activity, View itemView, View coverView, Books book) {
+    public static void openActivity(Activity activity, View itemView, View coverView, Book book) {
         Intent intent = new Intent(activity, NovelIntroActivity.class);
         intent.putExtra(EXTRA_BOOKS, book);
 

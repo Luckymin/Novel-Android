@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.startsmake.novel.R;
-import com.startsmake.novel.bean.db.Books;
+import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.helper.OnStartDragListener;
 import com.startsmake.novel.helper.SimpleItemTouchHelperCallback;
 import com.startsmake.novel.ui.activity.MainActivity;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.BookShelfOnItemClickListener, OnStartDragListener {
 
-    private List<Books> mBookshelfList;
+    private List<Book> mBookshelfList;
 
     private RecyclerView mRecyclerView;
     private BookshelfAdapter mAdapter;
@@ -60,7 +60,7 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
     }
 
     private void initValue() {
-        mBookshelfList = DataSupport.order("orderIndex asc").find(Books.class);
+        mBookshelfList = DataSupport.order("orderIndex asc").find(Book.class);
     }
 
     private void initView(View view) {
@@ -85,7 +85,7 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            List<Books> booksList = DataSupport.findAll(Books.class);
+            List<Book> booksList = DataSupport.findAll(Book.class);
             if (booksList != null) {
                 mBookshelfList.clear();
                 mBookshelfList.addAll(booksList);
@@ -102,12 +102,12 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
     }
 
     @Override
-    public void onBookShelfItemClick(View itemView, View coverView, Books book) {
+    public void onBookShelfItemClick(View itemView, View coverView, Book book) {
         ReaderNovelActivity.openActivity(getActivity(), book.getNovelID());
     }
 
     @Override
-    public void onItemMove(Books fromBook, Books toBook) {
+    public void onItemMove(Book fromBook, Book toBook) {
         int fromOrderIndex = fromBook.getOrderIndex();
         fromBook.setOrderIndex(toBook.getOrderIndex());
         toBook.setOrderIndex(fromOrderIndex);
@@ -118,12 +118,12 @@ public class BookshelfFragment extends BaseFragment implements BookshelfAdapter.
         ContentValues toValues = new ContentValues();
         toValues.put("orderIndex", toBook.getOrderIndex());
 
-        DataSupport.update(Books.class, fromValues, fromBook.getId());
-        DataSupport.update(Books.class, toValues, toBook.getId());
+        DataSupport.update(Book.class, fromValues, fromBook.getId());
+        DataSupport.update(Book.class, toValues, toBook.getId());
     }
 
     @Override
-    public void onItemDismiss(Books book) {
+    public void onItemDismiss(Book book) {
         book.delete();
     }
 

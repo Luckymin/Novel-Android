@@ -3,6 +3,7 @@ package com.startsmake.novel.bean.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * Date:2015-10-15
  * Description:
  */
-public class Books extends DataSupport implements Parcelable {
+public class Book extends DataSupport implements Parcelable {
     /**
      * cover : /agent/http://image.cmfu.com/books/2494758/2494758.jpg
      * site : qidian
@@ -26,7 +27,9 @@ public class Books extends DataSupport implements Parcelable {
      * shortIntro : 武之巅峰，是孤独，是寂寞，是漫漫求索，是高处不胜寒 逆境中成长，绝地里求生，不屈不饶，才能堪破武之极道。 凌霄阁试炼弟子兼扫地小厮杨开偶获一本无字黑书，从此踏上...
      * tags : ["玄幻","热血","架空","巅峰","奇遇","升级练功","东方玄幻"]
      */
-    public String _id;
+
+    @Column(ignore = true)
+    private String _id;
     private int id;
     private String novelID;
     private String cover;
@@ -39,8 +42,26 @@ public class Books extends DataSupport implements Parcelable {
     private String lastChapter;
     private String shortIntro;
     private List<String> tags;
+    private int wordCount;
+    private int banned;
 
     private int orderIndex;
+
+    public int getBanned() {
+        return banned;
+    }
+
+    public void setBanned(int banned) {
+        this.banned = banned;
+    }
+
+    public int getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(int wordCount) {
+        this.wordCount = wordCount;
+    }
 
     public void setCover(String cover) {
         this.cover = cover;
@@ -154,8 +175,9 @@ public class Books extends DataSupport implements Parcelable {
         this.novelID = novelID;
     }
 
-    public Books() {
+    public Book() {
     }
+
 
     @Override
     public int describeContents() {
@@ -177,9 +199,12 @@ public class Books extends DataSupport implements Parcelable {
         dest.writeString(this.lastChapter);
         dest.writeString(this.shortIntro);
         dest.writeStringList(this.tags);
+        dest.writeInt(this.wordCount);
+        dest.writeInt(this.banned);
+        dest.writeInt(this.orderIndex);
     }
 
-    protected Books(Parcel in) {
+    protected Book(Parcel in) {
         this._id = in.readString();
         this.id = in.readInt();
         this.novelID = in.readString();
@@ -193,17 +218,18 @@ public class Books extends DataSupport implements Parcelable {
         this.lastChapter = in.readString();
         this.shortIntro = in.readString();
         this.tags = in.createStringArrayList();
+        this.wordCount = in.readInt();
+        this.banned = in.readInt();
+        this.orderIndex = in.readInt();
     }
 
-    public static final Creator<Books> CREATOR = new Creator<Books>() {
-        public Books createFromParcel(Parcel source) {
-            return new Books(source);
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        public Book createFromParcel(Parcel source) {
+            return new Book(source);
         }
 
-        public Books[] newArray(int size) {
-            return new Books[size];
+        public Book[] newArray(int size) {
+            return new Book[size];
         }
     };
-
-
 }
