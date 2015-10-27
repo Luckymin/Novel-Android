@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -13,6 +14,7 @@ import com.startsmake.novel.Interfaces.OnClickListener;
 import com.startsmake.novel.R;
 import com.startsmake.novel.bean.BookListDetailsBean;
 import com.startsmake.novel.bean.db.Book;
+import com.startsmake.novel.bean.db.BookList;
 import com.startsmake.novel.databinding.ItemBookListDetailsHeaderBinding;
 import com.startsmake.novel.databinding.ItemBookListNovelBinding;
 import com.startsmake.novel.helper.GlideCircleTransform;
@@ -35,25 +37,28 @@ public class BookListDetailsAdapter extends RecyclerView.Adapter implements OnCl
     private final RequestManager mGlide;
     private final LayoutInflater mInflater;
     private final Context mContext;
+    private final BookList mBookList;
     private BookListDetailsBean mDetails;
     private OnNovelItemClickListener mOnNovelItemClickListener;
     private boolean isCleanItem;
 
-    public BookListDetailsAdapter(Context context, RequestManager glide) {
+
+    public BookListDetailsAdapter(Context context, BookList bookList, RequestManager glide) {
         mContext = context;
         mGlide = glide;
         mInflater = LayoutInflater.from(context);
+        mBookList = bookList;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
             ItemBookListDetailsHeaderBinding dataBinding = DataBindingUtil.inflate(mInflater, R.layout.item_book_list_details_header, parent, false);
-            dataBinding.btnCollect.setOnClickListener(new OnClickListener() {
+            dataBinding.btnCollect.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view, int position) {
+                public void onClick(View v) {
                     if (mOnNovelItemClickListener != null)
-                        mOnNovelItemClickListener.onCollectClick();
+                        mOnNovelItemClickListener.onCollectClick((Button) v);
                 }
             });
             HeaderViewHolder holder = new HeaderViewHolder(dataBinding.getRoot());
@@ -76,6 +81,8 @@ public class BookListDetailsAdapter extends RecyclerView.Adapter implements OnCl
             BookListDetailsBean.BookListEntity bookList = mDetails.getBookList();
             headerHolder.getDataBinding().setBookList(bookList);
 
+            setCollectBtnView(headerHolder.getDataBinding().btnCollect);
+
             String coverUrl = HttpConstant.URL_PICTURE + bookList.getAuthor().getAvatar().replaceAll("\\\\", "");
             mGlide.load(coverUrl)
                     .asBitmap()
@@ -96,6 +103,13 @@ public class BookListDetailsAdapter extends RecyclerView.Adapter implements OnCl
                     .into(novelViewHolder.getDataBinding().ivNovelCover);
 
         }
+    }
+
+    public void setCollectBtnView(Button btnCollect) {
+        btnCollect.setText(mBookList.getId() > 0 ? R.string.book_list_already_collected : R.string.book_list_collect);
+        btnCollect.setBackgroundResource(mBookList.getId() > 0 ? R.drawable.btn_novel_start_reading_book : R.drawable.btn_novel_add_book_rack);
+        btnCollect.setTextColor(mBookList.getId() > 0 ? mContext.getResources().getColor(android.R.color.white) : mContext.getResources().getColor(R.color.colorPrimary));
+
     }
 
     @Override
@@ -124,7 +138,7 @@ public class BookListDetailsAdapter extends RecyclerView.Adapter implements OnCl
     public void onClick(View view, int position) {
         if (mOnNovelItemClickListener != null) {
             Book book = mDetails.getBookList().getBooks().get(position - 1).getBook();
-            mOnNovelItemClickListener.onNovelClick(view, (View) view.getTag(), book);
+            mOnNovelItemClickListener.onNovelItemClick(view, (View) view.getTag(), book);
         }
     }
 
@@ -176,12 +190,13 @@ public class BookListDetailsAdapter extends RecyclerView.Adapter implements OnCl
     }
 
     public interface OnNovelItemClickListener {
-        void onNovelClick(View view, View coverView, Book book);
+        void onNovelItemClick(View view, View coverView, Book book);
 
-        void onCollectClick();
+        void onCollectClick(Button btnCollect);
     }
 
     public void setOnNovelItemClickListener(OnNovelItemClickListener onNovelItemClickListener) {
         mOnNovelItemClickListener = onNovelItemClickListener;
     }
+
 }

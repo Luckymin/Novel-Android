@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.startsmake.novel.helper;
 
 import android.graphics.Canvas;
@@ -129,7 +128,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         }
     }
 
-
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // We only want the active item to change
@@ -140,7 +138,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
                 itemViewHolder.onItemSelected();
             }
         }
-
         super.onSelectedChanged(viewHolder, actionState);
     }
 

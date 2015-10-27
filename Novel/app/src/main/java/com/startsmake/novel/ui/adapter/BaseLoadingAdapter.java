@@ -64,7 +64,9 @@ public abstract class BaseLoadingAdapter<T> extends RecyclerView.Adapter {
     }
 
     public void addItems(List<T> data) {
-        mData.addAll(data);
+        if (data != null && data.size() > 0) {
+            mData.addAll(data);
+        }
         notifyDataSetChanged();
     }
 
@@ -75,6 +77,10 @@ public abstract class BaseLoadingAdapter<T> extends RecyclerView.Adapter {
         } else {
             notifyItemRemoved(getItemCount() + 1);
         }
+    }
+
+    public void cleanData(){
+        mData.clear();
     }
 
     public boolean isShowLoading() {

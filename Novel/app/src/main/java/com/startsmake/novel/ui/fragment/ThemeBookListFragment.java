@@ -1,8 +1,8 @@
 package com.startsmake.novel.ui.fragment;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,11 +47,11 @@ public class ThemeBookListFragment extends BaseFragment {
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
-        mPagerAdapter = new TabLayoutViewPagerAdapter(getActivity().getSupportFragmentManager());
-//        mPagerAdapter.addFragment(ThemeBookPagerFragment.newInstance(PAGER_TYPE_MY_COLLECT), getString(R.string.theme_book_tab_name_my_collect));
-        mPagerAdapter.addFragment(ThemeBookPagerFragment.newInstance(PAGER_TYPE_HOT), getString(R.string.theme_book_tab_name_hot));
-        mPagerAdapter.addFragment(ThemeBookPagerFragment.newInstance(PAGER_TYPE_LATEST_POSTS), getString(R.string.theme_book_tab_name_latest_posts));
-        mPagerAdapter.addFragment(ThemeBookPagerFragment.newInstance(PAGER_TYPE_MOST_COLLECT), getString(R.string.theme_book_tab_name_most_collect));
+        mPagerAdapter = new TabLayoutViewPagerAdapter(getActivity().getFragmentManager());
+        mPagerAdapter.addFragment(BookListPagerFragment.newInstance(PAGER_TYPE_MY_COLLECT), getString(R.string.theme_book_tab_name_my_collect));
+        mPagerAdapter.addFragment(BookListPagerFragment.newInstance(PAGER_TYPE_HOT), getString(R.string.theme_book_tab_name_hot));
+        mPagerAdapter.addFragment(BookListPagerFragment.newInstance(PAGER_TYPE_LATEST_POSTS), getString(R.string.theme_book_tab_name_latest_posts));
+        mPagerAdapter.addFragment(BookListPagerFragment.newInstance(PAGER_TYPE_MOST_COLLECT), getString(R.string.theme_book_tab_name_most_collect));
         mViewPager.setAdapter(mPagerAdapter);
 
         ((OnInitTabLayoutCallback) getActivity()).initialThemeBookListTabLayout(mViewPager);

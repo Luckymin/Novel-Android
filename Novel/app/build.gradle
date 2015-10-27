@@ -36,6 +36,7 @@ dependencies {
         transitive = true
     }
     compile project(':library')
+    compile 'com.android.support:support-v13:23.1.0'
 }
 
 /*

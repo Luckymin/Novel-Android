@@ -15,16 +15,19 @@ import com.startsmake.novel.R;
 import com.startsmake.novel.bean.db.BookList;
 import com.startsmake.novel.bean.db.Book;
 import com.startsmake.novel.databinding.ItemThemeBookListBinding;
+import com.startsmake.novel.helper.ItemTouchHelperAdapter;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.ui.adapter.viewholder.EmptyViewHolder;
 import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
+
+import java.util.Collections;
 
 /**
  * User:Shine
  * Date:2015-10-20
  * Description:
  */
-public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> implements OnClickListener {
+public class BookListPagerAdapter extends BaseLoadingAdapter<BookList> implements OnClickListener, ItemTouchHelperAdapter {
 
     private static final int EMPTY_COLLECT_COUNT = 1;
 
@@ -36,7 +39,7 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> implemen
 
     private OnThemeBookItemClickListener mOnThemeBookItemClickListener;
 
-    public ThemeBookPagerAdapter(Context context, RequestManager glide, int pagerType) {
+    public BookListPagerAdapter(Context context, RequestManager glide, int pagerType) {
         super(context);
         mGlide = glide;
         mPagerType = pagerType;
@@ -112,6 +115,36 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> implemen
         }
     }
 
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mData, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        if (mOnThemeBookItemClickListener != null) {
+            mOnThemeBookItemClickListener.onItemMove(mData.get(fromPosition), mData.get(toPosition));
+        }
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        BookList bookList = mData.get(position);
+        mData.remove(bookList);
+        notifyItemRemoved(position);
+        if (mOnThemeBookItemClickListener != null) {
+            mOnThemeBookItemClickListener.onItemDismiss(bookList);
+        }
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return mData.size() > 0;
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return true;
+    }
+
     static class ThemeBookViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ItemThemeBookListBinding mDataBinding;
@@ -149,9 +182,9 @@ public class ThemeBookPagerAdapter extends BaseLoadingAdapter<BookList> implemen
 
         void onThemeBookItemClick(View itemView, View coverView, BookList book);
 
-        void onItemMove(Book fromBook, Book toBook);
+        void onItemMove(BookList fromBook, BookList toBook);
 
-        void onItemDismiss(Book book);
+        void onItemDismiss(BookList book);
     }
 
 }

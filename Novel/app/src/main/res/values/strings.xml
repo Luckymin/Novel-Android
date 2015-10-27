@@ -29,6 +29,8 @@
     <string name="network_failure_btn_retry_text">重试</string>
     <string name="novel_add_book_rack">加入书架</string>
     <string name="novel_remove_book_rack">移出书架</string>
+    <string name="book_list_collect">收藏</string>
+    <string name="book_list_already_collected">已收藏</string>
     <string name="collectCountText">人收藏</string>
     <string name="latelyFollowerText">人在追</string>
     <string name="novel_start_reading_book">开始阅读</string>

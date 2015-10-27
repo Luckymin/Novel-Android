@@ -4,8 +4,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,8 +18,8 @@ import android.view.View;
 import com.startsmake.novel.Interfaces.OnInitTabLayoutCallback;
 import com.startsmake.novel.R;
 import com.startsmake.novel.ui.fragment.BookClassifyFragment;
-import com.startsmake.novel.ui.fragment.BookshelfFragment;
 import com.startsmake.novel.ui.fragment.BookRankingFragment;
+import com.startsmake.novel.ui.fragment.BookshelfFragment;
 import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
 import com.startsmake.novel.utils.Utils;
 
@@ -101,11 +101,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawers();
         }
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if (isFragmentShown(transaction, tag)) {
             return;
         }
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
         if (fragment == null) {
             fragment = getFragmentInstance(tag);
             transaction.add(R.id.contentFrame, fragment, tag);
@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mCurrTag = newTag;
             return false;
         }
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(mCurrTag);
+        Fragment fragment = getFragmentManager().findFragmentByTag(mCurrTag);
         if (fragment != null && !fragment.isHidden()) {
             transaction.hide(fragment);
         }
@@ -199,20 +199,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void hideAllFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment bookRackFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_BOOKSHELF);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment bookRackFragment = getFragmentManager().findFragmentByTag(TAG_PAGE_BOOKSHELF);
         if (bookRackFragment != null && !bookRackFragment.isHidden()) {
             transaction.hide(bookRackFragment);
         }
-        Fragment classifyFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_CLASSIFICATION);
+        Fragment classifyFragment = getFragmentManager().findFragmentByTag(TAG_PAGE_CLASSIFICATION);
         if (classifyFragment != null && !classifyFragment.isHidden()) {
             transaction.hide(classifyFragment);
         }
-        Fragment rankingFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_RANKING);
+        Fragment rankingFragment = getFragmentManager().findFragmentByTag(TAG_PAGE_RANKING);
         if (rankingFragment != null && !rankingFragment.isHidden()) {
             transaction.hide(rankingFragment);
         }
-        Fragment themeBookListFragment = getSupportFragmentManager().findFragmentByTag(TAG_PAGE_THEME_BOOK_LIST);
+        Fragment themeBookListFragment = getFragmentManager().findFragmentByTag(TAG_PAGE_THEME_BOOK_LIST);
         if (themeBookListFragment != null && !themeBookListFragment.isHidden()) {
             transaction.hide(themeBookListFragment);
         }

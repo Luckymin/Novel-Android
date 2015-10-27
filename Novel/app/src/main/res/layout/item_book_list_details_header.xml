@@ -34,40 +34,40 @@
             android:textColor="@color/textSecondary"
             android:textSize="14dp"/>
 
-
-        <ImageView
-            android:id="@id/ivUserCover"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tvBookListDesc"
             android:layout_marginBottom="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/margin_medium"/>
+            android:layout_marginTop="@dimen/margin_medium"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@id/tvAuthorName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ivUserCover"
-            android:layout_alignTop="@id/ivUserCover"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_toRightOf="@id/ivUserCover"
-            android:gravity="center"
-            android:text="@{bookList.author.nickname}"
-            android:textColor="@color/user_name_color"
-            android:textSize="14sp"/>
+            <ImageView
+                android:id="@id/ivUserCover"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
 
-        <Button
-            android:id="@id/btnCollect"
-            android:layout_width="40dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@id/tvAuthorName"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/margin_medium"
-            android:background="@drawable/btn_novel_add_book_rack"
-            android:text="收藏"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="10sp"/>
+            <TextView
+                android:id="@id/tvAuthorName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_weight="1"
+                android:text="@{bookList.author.nickname}"
+                android:textColor="@color/user_name_color"
+                android:textSize="14sp"/>
 
+            <Button
+                android:id="@id/btnCollect"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:background="@null"
+                android:text="收藏"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10sp"/>
+        </LinearLayout>
     </RelativeLayout>
 </layout>

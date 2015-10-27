@@ -1,8 +1,8 @@
 package com.startsmake.novel.ui.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,14 @@ import java.util.List;
  */
 public class TabLayoutViewPagerAdapter extends FragmentPagerAdapter {
 
+
     private final List<Fragment> mFragments = new ArrayList<>();
     private final List<String> mFragmentTitles = new ArrayList<>();
 
     public TabLayoutViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
+
 
     public void addFragment(Fragment fragment, String title) {
         mFragments.add(fragment);

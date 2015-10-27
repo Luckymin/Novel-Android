@@ -33,6 +33,7 @@ public class BookList extends DataSupport implements Parcelable {
     private String collectorCount;
     private String cover;
     private String desc;
+    private int orderIndex;
 
     public void set_id(String _id) {
         this._id = _id;
@@ -114,6 +115,14 @@ public class BookList extends DataSupport implements Parcelable {
         this.bookListID = bookListID;
     }
 
+    public int getOrderIndex() {
+        return orderIndex;
+    }
+
+    public void setOrderIndex(int orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
     public BookList() {
     }
 
@@ -135,6 +144,7 @@ public class BookList extends DataSupport implements Parcelable {
         dest.writeString(this.collectorCount);
         dest.writeString(this.cover);
         dest.writeString(this.desc);
+        dest.writeInt(this.orderIndex);
     }
 
     protected BookList(Parcel in) {
@@ -148,6 +158,7 @@ public class BookList extends DataSupport implements Parcelable {
         this.collectorCount = in.readString();
         this.cover = in.readString();
         this.desc = in.readString();
+        this.orderIndex = in.readInt();
     }
 
     public static final Creator<BookList> CREATOR = new Creator<BookList>() {

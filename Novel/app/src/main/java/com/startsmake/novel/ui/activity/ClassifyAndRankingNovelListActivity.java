@@ -73,7 +73,7 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mVpNovelClassifyFiltrate = (ViewPager) findViewById(R.id.vpNovelClassifyFiltrate);
         mRootLayout = (ViewGroup) findViewById(R.id.rootLayout);
-        TabLayoutViewPagerAdapter adapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager());
+        TabLayoutViewPagerAdapter adapter = new TabLayoutViewPagerAdapter(getFragmentManager());
         adapter.addFragment(NovelListFragment.newInstance(NovelListFragment.TAB_TYPE_ALL, mClassifyTag), getString(R.string.classify_tab_all));
         adapter.addFragment(NovelListFragment.newInstance(NovelListFragment.TAB_TYPE_CONTINUED, mClassifyTag), getString(R.string.classify_tab_to_be_continued));
         adapter.addFragment(NovelListFragment.newInstance(NovelListFragment.TAB_TYPE_OVER, mClassifyTag), getString(R.string.classify_tab_is_over));
@@ -101,10 +101,10 @@ public class ClassifyAndRankingNovelListActivity extends BaseActivity {
             mRevealBackgroundView.setOnStateChangeListener(new RevealBackgroundView.OnStateChangeListener() {
                 @Override
                 public void onStateChange(int state) {
-                    if (RevealBackgroundView.STATE_FINISHED == state){
+                    if (RevealBackgroundView.STATE_FINISHED == state) {
                         mVpNovelClassifyFiltrate.setVisibility(View.VISIBLE);
                         mRevealBackgroundView.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         mVpNovelClassifyFiltrate.setVisibility(View.INVISIBLE);
                     }
                 }

@@ -9,6 +9,8 @@ import com.startsmake.novel.http.GsonRequest;
 import com.startsmake.novel.http.HttpConstant;
 import com.startsmake.novel.ui.fragment.ThemeBookListFragment;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 import timber.log.Timber;
@@ -22,9 +24,10 @@ public class ThemeBookPagerModel extends BaseModel {
 
     @Override
     public void getThemeBookList(int pagerType, final int start, final ThemeBookPagerCallback callback) {
-        if (pagerType == ThemeBookListFragment.PAGER_TYPE_MY_COLLECT) {
-
-        } else {
+        if (pagerType == ThemeBookListFragment.PAGER_TYPE_MY_COLLECT) {//通过本地数据库获取我的收藏数据
+            List<BookList> bookLists = DataSupport.order("orderIndex desc").find(BookList.class);
+            callback.getThemeBookListSuccess(0, bookLists);
+        } else {//通过网络获取数据
             String url = splicingUrl(pagerType, start);
             Timber.d("网络请求 --> type : %s ,url : %s", pagerType, url);
             GsonRequest request = new GsonRequest<>(url, ThemeBookListBean.class, new Response.Listener<ThemeBookListBean>() {
@@ -35,7 +38,7 @@ public class ThemeBookPagerModel extends BaseModel {
                     } else {
                         callback.getThemeBookListError();
                     }
-                    Timber.d("请求结果 --> %s , 条数 : %s", response.getOk(), response.getBookLists().size());
+                    Timber.d("请求结果 --> %s", response.getOk(), response.getBookLists().size());
                 }
             }, new Response.ErrorListener() {
                 @Override
